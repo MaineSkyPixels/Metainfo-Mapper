@@ -344,6 +344,13 @@ body.light-theme .token-card h3 {
     color: #1f3c6d;
 }
 
+/* Owner info card tweaks */
+#owner-info { font-size: 13px; }
+#owner-info h3 { font-size: 14px; margin-bottom: 8px; }
+#owner-info p { margin: 6px 0; }
+#owner-info .owner-foot { margin-top: 10px; opacity: 0.85; font-size: 12px; }
+body.light-theme #owner-info .owner-foot { opacity: 0.9; }
+
 #mapbox-token-status {
     min-height: 18px;
     margin-top: 6px;
