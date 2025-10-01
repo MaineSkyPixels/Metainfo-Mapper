@@ -16,28 +16,6 @@ Secure web-hosted viewer for plotting drone imagery metadata while keeping every
 
 ## Installation & Launch
 
-1. Install dependencies:
-   ```bash
-   npm install
-   ```
-2. Build the browser bundle whenever `src/` changes:
-   ```bash
-   npm run build:client
-   ```
-3. (Optional) Development workflow:
-   ```bash
-   npm run watch:client   # rebuilds client bundle on change
-   npm run dev            # restarts Express via nodemon
-   ```
-4. (Optional) Configure streaming basemaps by exporting environment variables before launch (a browser-side token field is also available on the landing page):
-   - `MAPBOX_ACCESS_TOKEN` for your Mapbox token scoped to the chosen styles.
-   - `MAPBOX_STYLE` to override the default `mapbox/satellite-streets-v12` hybrid layer.
-   - `MAPBOX_MIN_ZOOM` and `MAPBOX_MAX_ZOOM` when you need a different zoom window.
-5. Start the hardened server:
-   ```bash
-   npm start
-   ```
-6. Open `http://localhost:3030` (or your configured host/port).
 
 ## Usage
 
@@ -64,40 +42,6 @@ Secure web-hosted viewer for plotting drone imagery metadata while keeping every
 - The intro panel appears on first load and hides automatically when a session starts or data is loaded.
 - The Basemap Token panel lives beneath Progress in the sidebar to reduce accidental requests.
 
-## Cloudflare Pages Deployment
-
-- The `Cloudflare/` directory contains the production-ready static bundle (copied from `public/` after running `npm run build:client`). It includes `index.html`, `css/`, `js/`, and `lib/` assets required for Pages hosting.
-- Server-side code (`server.js`, `node_modules/`, `src/`, batch installers, MBTiles) is not required on Cloudflare Pages. Only deploy the contents of `Cloudflare/`.
-- To refresh on-demand:
-  - `npm run build:client`
-  - `npm run sync:cloudflare` (or run `update-cloudflare.ps1` / `update-cloudflare.bat`)
-  - Optionally commit/push from the `Cloudflare/` repo if you’re using a separate Pages repo.
-- Initial Pages setup: point your Pages project to the `Cloudflare` folder (no build command).
-
-### Update & Sync (On-demand)
-
-- Build the client: `npm run build:client`
-- Sync static bundle: `npm run sync:cloudflare`
-- If using a separate Pages repo: `cd Cloudflare && git add -A && git commit -m "Sync bundle" && git push`
-
-## Easter Eggs (Optional)
-
-- Add `?frak=yeah` to the URL for a small BSG-themed console message and a subtle amber pulse.
-- Add `?chevron=7` to the URL for a Stargate nod and cyan pulse.
-- Add `?signature=on` to embed a one‑line DRADIS signature comment inside exported KML (no data exfiltration; local only).
-
-
-## Directory Layout
-
-```
-Web/
-├── CHANGELOG.md    # Release notes for the web build
-├── public/         # Static assets served by Express (includes built bundle)
-├── src/            # Client-side source code bundled with esbuild
-├── mbt/            # MBTiles datasets (read-only)
-├── server.js       # Hardened Express host for static + tile requests
-├── package.json    # Scripts, dependencies, and build tasks
-└── dependencies.txt# Minimal runtime requirements
 ```
 
 ## Security Posture
