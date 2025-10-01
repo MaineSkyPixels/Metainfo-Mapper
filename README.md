@@ -12,8 +12,6 @@ Secure web-hosted viewer for plotting drone imagery metadata while keeping every
 
 ## Prerequisites
 
-- Node.js v18 or newer
-- (Optional) MBTiles datasets in `mbt/` if you want local base maps
 - JPG/JPEG images containing GPS EXIF metadata
 
 ## Installation & Launch
@@ -104,10 +102,9 @@ Web/
 
 ## Security Posture
 
-- Only `/tiles` and `/health` endpoints are exposed; there are no upload routes, and everything else happens client-side.
-- All media parsing stays in your browser; after the page loads it continues to work offline until you close the tab.
-- Cross-origin requests are blocked by default—host behind HTTPS and authentication in production.
-- KML/HTML exports escape user-provided text to prevent injection.
+- No uploads, no server processing. All EXIF parsing and KML generation run in your browser.
+- Tokens are stored in your browser’s localStorage and are not sent to the server.
+- KML/HTML exports escape user‑provided text to prevent injection.
 
 ## Notes
 
