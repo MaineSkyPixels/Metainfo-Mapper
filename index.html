@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metainfo Plotter - Client-Side Drone GPS Viewer</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div id="app">
+        <div id="sidebar">
+            <h1>Metainfo <span>Plotter</span></h1>
+            <p class="tagline">Map your drone imagery without ever sending a photo to the server.</p>
+
+            <div class="theme-toggle">
+                <span>Theme</span>
+                <button id="theme-toggle" class="secondary-btn">Switch to Light</button>
+            </div>
+
+            <div id="session-section">
+                <h3>Session Setup</h3>
+                <div id="new-session">
+                    <input type="text" id="location-name" placeholder="Name your mission (e.g., Sunrise Survey)"> 
+                    <button id="start-session">Start New Session</button>
+                </div>
+                <div id="load-session" style="display:none;">
+                    <button id="load-kml-btn">Load Previous KML</button>
+                    <input type="file" id="kml-input" accept=".kml,.kmz" style="display:none;">
+                </div>
+                <hr>
+            </div>
+
+
+            <div id="upload-section" style="display:none;">
+                <h3>Add Images</h3>
+                <p class="hint">Drag in JPG/JPEG files or entire folders — processing happens locally in your browser.</p>
+                <div id="drop-zone">
+                    <p>Drop images/folders here<br>or click to browse</p>
+                    <input type="file" id="file-input" multiple accept=".jpg,.jpeg" style="display:none;">
+                </div>
+                <button id="select-folder" class="secondary-btn">Select Folder (Browser)</button>
+                <input type="file" id="folder-input" webkitdirectory directory style="display:none;">
+            </div>
+
+            <div id="stats" style="display:none;">
+                <h3>Statistics</h3>
+                <div id="stats-content">
+                    <p>Images processed: <span id="image-count">0</span></p>
+                    <p>Valid GPS: <span id="valid-count">0</span></p>
+                    <p>Errors: <span id="error-count">0</span></p>
+                </div>
+            </div>
+
+            <div id="controls" style="display:none;">
+                <button id="add-more-btn" class="secondary-btn">Add More Images</button>
+                <button id="done-btn" class="primary-btn">I'm Done – Generate KML</button>
+                <button id="download-kml" class="success-btn" style="display:none;">Download KML</button>
+                <button id="open-mymaps" class="accent-btn" style="display:none;">Open in Google My Maps</button>
+                <p id="mymaps-hint" class="hint" style="display:none;">We will download the latest KML and open My Maps in a new tab. Choose "Create a new map" → "Import" and select the downloaded file.</p>
+                <button id="view-errors" class="warning-btn" style="display:none;">View Error Report</button>
+                <hr>
+                <button id="new-session-btn" class="secondary-btn">Start New Session</button>
+            </div>
+
+            <div id="progress" style="display:none;">
+                <h3>Processing...</h3>
+                <div id="progress-bar">
+                    <div id="progress-fill"></div>
+                </div>
+                <p id="progress-text">0 / 0</p>
+            </div>
+
+            <div id="mapbox-config" class="token-card">
+                <h3>Basemap Token</h3>
+                <p class="hint">Paste your Mapbox access token to stream hybrid satellite tiles. Tokens are stored in this browser's local storage until you clear them.</p>
+                <p class="hint">This token will stay active across visits until you clear it here or remove it through your browser site settings.</p>
+                <p class="hint">The token is not uploaded to the server and stays in this browser only.</p>
+                <input type="text" id="mapbox-token-input" placeholder="pk.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" autocomplete="off" spellcheck="false">
+                <button id="mapbox-token-apply" class="primary-btn">Use Mapbox Token</button>
+                <button id="mapbox-token-clear" class="secondary-btn">Clear Token</button>
+                <p id="mapbox-token-status" class="hint"></p>
+            </div>
+
+        </div>
+
+        <div id="map">
+            <div id="map-about-card" class="map-about-card">
+                <h3>What it does</h3>
+                <ul>
+                    <li>Plot geotagged imagery and flight paths instantly in your browser.</li>
+                    <li>Export clean KML ready for Earth, My Maps, or your GIS tools.</li>
+                    <li>Spot GPS gaps quickly so you can troubleshoot metadata issues.</li>
+                </ul>
+            </div>
+            <div id="map-intro-card" class="map-intro-card">
+                <p><strong>Metainfo Plotter</strong> is an open-source side project built by a Maine-based drone pilot. The app extracts GPS metadata entirely in your browser, keeps everything on your device, working entirely in-memory with zero logging.</p>
+                <div class="pill-row">
+                    <span class="pill">100% client-side EXIF parsing</span>
+                    <span class="pill">No tracking &middot; No uploads</span>
+                    <span class="pill">Built for drone workflows</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="coord-popup" class="popup" style="display:none;">
+            <span id="coord-text"></span>
+        </div>
+    </div>
+
+    <div id="error-modal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Error Report</h2>
+            <div id="error-table-container"></div>
+            <button id="download-report">Download Report</button>
+        </div>
+    </div>
+
+    <div id="privacy-modal" class="modal" style="display:none;">
+        <div class="modal-content wide">
+            <h2>Your photos never leave this browser</h2>
+            <p>Metainfo Plotter runs entirely on your device. After the page loads, it works 100% offline until you close the tab, with no logging, uploads, or analytics.</p>
+            <ul>
+                <li>No images or metadata are stored on disk.</li>
+                <li>Processing is done locally using open-source libraries.</li>
+                <li>Refresh or close the tab to clear your session.</li>
+            </ul>
+            <button id="privacy-ack-btn" class="primary-btn">Sounds good</button>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/exifr/dist/lite.umd.min.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
