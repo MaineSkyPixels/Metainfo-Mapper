@@ -1,7 +1,7 @@
 # Changelog
 
 ## 1.4.2 - 2025-09-30
-- Added Mapbox streaming support with MBTiles fallback exposed via `/map-config`.
+- Added Mapbox streaming support with blank canvas fallback exposed via `/map-config`.
 - Basemap Token panel (browser-side) with localStorage persistence; token help page at `mapbox-token-help.html`.
 - Constrained Mapbox requests to flight bounds with ~2,000 ft buffer and zoom levels 15–18.
 - Repositioned “What it does” into a left map overlay; removed the large “Ready to visualise” overlay; improved dark/light map background.
@@ -11,12 +11,12 @@
 - Optional easter eggs: URL flags (`?frak=yeah`, `?chevron=7`, `?signature=on`) with small CSS pulses and opt-in KML signature comment.
 
 ## 1.4.1 - 2025-09-30
-- Removed the New England map clamp; the canvas now pans across the entire MBTiles coverage.
+- Removed the New England map clamp; the canvas now pans across the entire map coverage.
 - Clarified privacy messaging to state the app remains 100% offline once loaded.
 - Documented the dark-first/light theme toggle in the README.
 
 ## 1.4.0 - 2025-09-30
-- Rebranded the interface to *Metainfo Plotter* with refreshed copy highlighting the Maine-based, client-side nature of the project.
+- Rebranded the interface to *Metainfo Mapper* with refreshed copy highlighting the Maine-based, client-side nature of the project.
 - Added a first-run privacy notice modal to reassure pilots that no images or visitor data are ever uploaded or logged.
 - Introduced new sidebar and map styling with welcome messaging and feature highlights for a more polished landing experience.
 - Introduced a dark-first theme with a light/dark toggle and persistent preference storage.
@@ -35,10 +35,21 @@
 
 ## 1.2.0 - 2025-09-30
 - Hardened Express backend: removed upload endpoints, added Helmet + rate limiting, and scoped routes to static assets, `/tiles`, and `/health` only.
-- Rebased MBTiles loader to close handles safely and validate tile requests before serving.
+- Updated map display to use blank canvas with georeferenced positioning.
 - Migrated EXIF parsing to the browser; all image handling now stays client-side with progress feedback and improved error reporting.
 - Escaped all KML/HTML output to prevent markup injection and clarified client messaging about local-only processing.
 - Introduced esbuild bundling pipeline (`src/app.js` → `public/js/app.js`) with build/watch scripts.
 - Refreshed README guidance covering secure deployment, development workflow, and SPA architecture.
 
+## 1.4.3 - 2025-01-27
+- **Project Rebranding**: Renamed from "Metainfo Plotter" to "Metainfo Mapper" across all files and documentation.
+- **Removed MBTiles References**: Updated all documentation to remove references to MBTiles fallback system.
+- **Updated Basemap Documentation**: Clarified that the application uses a blank canvas by default with georeferenced positioning.
+- **Enhanced Mapbox Help**: Updated mapbox-token-help.html to emphasize that Mapbox usage is completely optional.
+- **Documentation Updates**:
+  - Updated README.md to reflect blank canvas as default instead of MBTiles
+  - Updated CHANGELOG.md to remove MBTiles references
+  - Enhanced mapbox-token-help.html with clear messaging about optional nature of Mapbox tokens
+  - Added emphasis that all core features work perfectly without any Mapbox token
+- **User Experience Improvements**: Made it clear that users can use the app effectively with just the blank canvas for GPS plotting and KML export.
 

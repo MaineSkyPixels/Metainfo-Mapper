@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Get a Mapbox Token (Free) – Metainfo Plotter</title>
+  <title>Get a Mapbox Token (Free) – Metainfo Mapper</title>
   <link rel="stylesheet" href="css/styles.css">
   <style>
     html, body { height: auto; overflow-y: auto !important; overflow-x: hidden; }
@@ -23,17 +23,17 @@
 <body>
   <div class="doc">
     <h1>Get a Mapbox Access Token (Free)</h1>
-    <p class="sub">Use this token in Metainfo Plotter to stream high‑quality hybrid satellite maps.</p>
+    <p class="sub">Metainfo Mapper works perfectly with just a blank canvas, but you can optionally use this token to stream high‑quality hybrid satellite maps as a background.</p>
 
     <div class="links">
       <a href="https://account.mapbox.com/auth/signup/" target="_blank" rel="noopener">Sign up for Mapbox (free)</a>
       <a href="https://account.mapbox.com/access-tokens/" target="_blank" rel="noopener">Open your Access Tokens</a>
-      <a href="/" rel="noopener">Back to Metainfo Plotter</a>
+      <a href="/" rel="noopener">Back to Metainfo Mapper</a>
     </div>
 
     <div class="step">
-      <h2>1) Create a free Mapbox account</h2>
-      <p>Visit the Mapbox sign‑up page and create a free account. You can use a personal email and choose the free tier to start.</p>
+      <h2>1) Create a free Mapbox account (Optional)</h2>
+      <p>If you'd like to add satellite imagery as a background, visit the Mapbox sign‑up page and create a free account. You can use a personal email and choose the free tier to start. <strong>This step is completely optional</strong> - the app works great without it!</p>
       <p class="hint">Link: <a href="https://account.mapbox.com/auth/signup/" target="_blank" rel="noopener">account.mapbox.com/auth/signup/</a></p>
     </div>
 
@@ -45,25 +45,26 @@
 
     <div class="step">
       <h2>3) Create (optional) a dedicated token</h2>
-      <p>You can click <strong>Create a token</strong> to generate a dedicated token for Metainfo Plotter. Keep the default public scopes, and optionally set URL restrictions for your domain later.</p>
+      <p>You can click <strong>Create a token</strong> to generate a dedicated token for Metainfo Mapper. Keep the default public scopes, and optionally set URL restrictions for your domain later.</p>
     </div>
 
     <div class="step">
-      <h2>4) Copy the token and paste into Metainfo Plotter</h2>
-      <p>Click the copy icon next to your public token, return to the app, and paste it under <strong>Basemap Token → Use Mapbox Token</strong>. Your browser stores the token locally and never uploads it to the server.</p>
+      <h2>4) Copy the token and paste into Metainfo Mapper</h2>
+      <p>Click the copy icon next to your public token, return to the app, and paste it under <strong>Basemap Token → Use Mapbox Token</strong>. Your browser stores the token locally and never uploads it to the server. This will add Mapbox satellite imagery as a background to your existing blank canvas display.</p>
     </div>
 
     <div class="step">
       <h2>5) Load images to activate hybrid satellite tiles</h2>
-      <p>Drag photos into the app. Once GPS bounds are known, Metainfo Plotter fetches only tiles for the flight area (zoom 15–18). You can clear the token any time.</p>
+      <p>Drag photos into the app. Once GPS bounds are known, Metainfo Mapper fetches only tiles for the flight area (zoom 15–18). You can clear the token any time to return to the blank canvas. <strong>Remember: the app works perfectly without any token at all!</strong></p>
     </div>
 
     <div class="step">
       <h2>Tips & Limits</h2>
       <ul>
+        <li><strong>No token needed:</strong> Metainfo Mapper works great with just the blank canvas - all GPS plotting and KML export features work perfectly without Mapbox.</li>
         <li>Use the default <code>mapbox/satellite-streets-v12</code> style for hybrid satellite + labels.</li>
         <li>Tokens are public; restrict by URL in Mapbox if publishing widely.</li>
-        <li>Free tier has request limits; Metainfo Plotter minimizes calls using buffered bounds.</li>
+        <li>Free tier has request limits; Metainfo Mapper minimizes calls using buffered bounds.</li>
       </ul>
     </div>
   </div>

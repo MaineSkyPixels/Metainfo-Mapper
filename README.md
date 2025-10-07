@@ -1,4 +1,4 @@
-# Metainfo Plotter
+# Metainfo Mapper
 
 Secure web-hosted viewer for plotting drone imagery metadata while keeping every photo on the client device.
 
@@ -32,7 +32,7 @@ Secure web-hosted viewer for plotting drone imagery metadata while keeping every
 
 ## Basemap Behaviour
 
-- Local MBTiles remain the default layer for offline resilience and are reinstated automatically if Mapbox tiles fail to load.
+- The application displays images on a blank canvas by default, with georeferenced positioning.
 - Supplying `MAPBOX_ACCESS_TOKEN` (or pasting a token into the new **Basemap Token** panel on the landing page) enables Mapbox's hybrid satellite tiles; the browser stores manual tokens locally and overrides the server value until cleared.
 - When Mapbox is active the map view is clamped to the flight area with roughly a 2,000 ft buffer and zoom levels 15-18 to balance coverage with tile usage.
 
