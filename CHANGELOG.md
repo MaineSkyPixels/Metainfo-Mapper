@@ -41,7 +41,7 @@
 - Introduced esbuild bundling pipeline (`src/app.js` → `public/js/app.js`) with build/watch scripts.
 - Refreshed README guidance covering secure deployment, development workflow, and SPA architecture.
 
-## 1.4.3 - 2025-01-27
+## 1.4.3 - 2025-10-07
 - **Project Rebranding**: Renamed from "Metainfo Plotter" to "Metainfo Mapper" across all files and documentation.
 - **Removed MBTiles References**: Updated all documentation to remove references to MBTiles fallback system.
 - **Updated Basemap Documentation**: Clarified that the application uses a blank canvas by default with georeferenced positioning.
@@ -52,4 +52,17 @@
   - Enhanced mapbox-token-help.html with clear messaging about optional nature of Mapbox tokens
   - Added emphasis that all core features work perfectly without any Mapbox token
 - **User Experience Improvements**: Made it clear that users can use the app effectively with just the blank canvas for GPS plotting and KML export.
+- **New About Page**: Created comprehensive about.html page with detailed project information, privacy details, and technical specifications.
+- **Enhanced Navigation**: Added links to about page and Discord server throughout the application.
+- **Improved UI/UX**:
+  - Enhanced text visibility in dark theme with brighter white colors
+  - Added theme toggle functionality to about page
+  - Updated Basemap Token section with clearer privacy messaging
+  - Added "(Optional)" to Basemap Token title for clarity
+  - Improved font sizing and emphasis in token configuration section
+- **Community Integration**: Added Discord server link (https://discord.gg/RX5aa2nwFd) for user community and support.
+- **Version Tracking**: Implemented version numbering system (#100725a format) for tracking updates.
+- **Privacy Enhancements**: Clarified Mapbox token handling with detailed explanation of direct browser-to-Mapbox communication.
+- **Development Status Notices**: Added clear warnings about active development status in both main app and about page.
+- **Contact Information Update**: Updated email address from info@skypixels.org to info@maineskypixels.com across all files.
 

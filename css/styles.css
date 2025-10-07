@@ -29,7 +29,7 @@ body {
 }
 
 #sidebar h3 {
-    color: #495057;
+    color: #f8fafc;
     margin: 15px 0 10px;
     font-size: 16px;
 }
@@ -323,7 +323,8 @@ body {
     font-size: 15px;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: #e2e8f0;
+    color: #f8fafc;
+    font-weight: 600;
 }
 
 .token-card .hint {
@@ -342,6 +343,7 @@ body.light-theme .token-card {
 
 body.light-theme .token-card h3 {
     color: #1f3c6d;
+    font-weight: 600;
 }
 
 /* Owner info card tweaks */
@@ -587,6 +589,10 @@ body.light-theme #sidebar {
 }
 
 body.light-theme #sidebar h1 {
+    color: #1f2933;
+}
+
+body.light-theme #sidebar h3 {
     color: #1f2933;
 }
 

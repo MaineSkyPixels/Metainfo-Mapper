@@ -72,26 +72,29 @@
             </div>
 
             <div id="mapbox-config" class="token-card">
-                <h3>Basemap Token</h3>
-                <p class="hint">Paste your Mapbox access token to stream hybrid satellite tiles. Tokens are stored in this browser's local storage until you clear them.</p>
-                <p class="hint">This token will stay active across visits until you clear it here or remove it through your browser site settings.</p>
-                <p class="hint">The token is not uploaded to the server and stays in this browser only.</p>
+                <h3>Basemap Token (Optional)</h3>
+                <p class="hint" style="font-size: 12px;">Paste your Mapbox access token to stream hybrid satellite tiles. Tokens are stored in your browser's local storage until you clear them.</p>
+                <p class="hint" style="font-size: 12px;">This token will stay active across visits until you clear it here or remove it through your browser site settings.</p>
+                <p class="hint" style="font-size: 12px;">The token is not uploaded to the server and is only passed directly to Mapbox from <strong><u>your browser directly</u></strong>.</p>
                 <input type="text" id="mapbox-token-input" placeholder="pk.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" autocomplete="off" spellcheck="false">
                 <button id="mapbox-token-apply" class="primary-btn">Use Mapbox Token</button>
                 <button id="mapbox-token-clear" class="secondary-btn">Clear Token</button>
-                <p class="hint">
+                <p class="hint" style="font-size: 12px;">
                     What is a Mapbox token? 
                     <a href="/mapbox-token-help.html" class="learn-link">Click here to learn how to get one for FREE</a>.
                 </p>
-                <p id="mapbox-token-status" class="hint"></p>
+                <p id="mapbox-token-status" class="hint" style="font-size: 12px;"></p>
             </div>
 
             <div id="owner-info" class="token-card">
-                <h3>About This Project</h3>
+                <h3><a href="about.html" class="learn-link" style="text-decoration: none; color: inherit;">About This Project</a></h3>
                 <p><strong>Maine Sky Pixels LLC</strong></p>
-                <p>Questions? Email <a href="mailto:info@skypixels.org">info@skypixels.org</a></p>
+                <p>Questions? Email <a href="mailto:info@maineskypixels.com">info@maineskypixels.com</a></p>
                 <p>GitHub: <a href="https://github.com/MaineSkyPixels" target="_blank" rel="noopener">https://github.com/MaineSkyPixels</a></p>
+                <p><a href="https://discord.gg/RX5aa2nwFd" target="_blank" rel="noopener" class="learn-link">Join the Discord server</a></p>
+                <p><a href="about.html" class="learn-link">Learn more about this project →</a></p>
                 <p class="owner-foot">© Copyright Maine Sky Pixels 2025</p>
+                <p class="owner-foot">Version #100725a</p>
             </div>
 
         </div>
@@ -103,6 +106,9 @@
                     <li>Plot geotagged imagery and flight paths instantly in your browser.</li>
                     <li>Export clean KML ready for Earth, My Maps, or your GIS tools.</li>
                     <li>Spot GPS gaps quickly so you can troubleshoot metadata issues.</li>
+                    <li><a href="about.html" class="learn-link">Learn more about this project</a></li>
+                    <li><a href="https://discord.gg/RX5aa2nwFd" target="_blank" rel="noopener" class="learn-link">Join the Metainfo Mapper Discord server</a></li>
+                    <li>This project is still in active development and bugs may occur.</li>
                 </ul>
             </div>
             <div id="map-intro-card" class="map-intro-card">
@@ -137,6 +143,7 @@
                 <li>No images or metadata are stored on disk.</li>
                 <li>Processing is done locally using open-source libraries.</li>
                 <li>Refresh or close the tab to clear your session.</li>
+                <li>This project is still in active development and bugs may occur.</li>
             </ul>
             <button id="privacy-ack-btn" class="primary-btn">Sounds good</button>
         </div>
