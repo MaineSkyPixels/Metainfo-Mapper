@@ -65,4 +65,7 @@
 - **Privacy Enhancements**: Clarified Mapbox token handling with detailed explanation of direct browser-to-Mapbox communication.
 - **Development Status Notices**: Added clear warnings about active development status in both main app and about page.
 - **Contact Information Update**: Updated email address from info@skypixels.org to info@maineskypixels.com across all files.
+- **Website Launch**: Added live website URL (https://metainfomapper.com/) to all documentation and press materials.
+- **License Update**: Added PolyForm Noncommercial License 1.0.0 with commercial use restrictions requiring explicit permission.
+- **Performance Claims**: Updated capacity from "hundreds" to "thousands" of JPGs for more accurate performance representation.
 

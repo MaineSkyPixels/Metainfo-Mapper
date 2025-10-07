@@ -1,3 +1,15 @@
+### License
+
+This project is licensed under the **PolyForm Noncommercial License 1.0.0**.  
+You are free to use and modify the code for personal, educational, or
+non-commercial projects.  
+
+**Commercial use, resale, or hosting this app behind a paywall requires
+explicit written permission from Maine Sky Pixels LLC.**
+
+➡️ See the [LICENSE](./LICENSE) file for details.
+
+
 # Metainfo Mapper
 
 A privacy-first, client-side web application for visualizing drone imagery GPS metadata while keeping every photo on the client device. Built by Maine Sky Pixels LLC for drone pilots and aerial photographers.
@@ -6,7 +18,7 @@ A privacy-first, client-side web application for visualizing drone imagery GPS m
 
 - **Dark-first UI** – switch between dark and light themes with a single click.
 - **Browser-only workflow** – EXIF parsing and KML generation happen entirely in the user's browser, so no media is uploaded.
-- **Instant previews** – Load hundreds of JPGs and visualise metadata immediately, even when you stay offline.
+- **Instant previews** – Load thousands of JPGs and visualise metadata immediately, even when you stay offline.
 - **Mission storytelling** – Build sessions, visualise paths, surface GPS gaps, and export shareable KML in seconds.
 - **Blank canvas default** – Images are plotted on a clean canvas with georeferenced positioning by default.
 - **Optional Mapbox integration** – Add satellite imagery backgrounds with a free Mapbox token (completely optional).
@@ -57,6 +69,7 @@ A privacy-first, client-side web application for visualizing drone imagery GPS m
 
 ## Community & Support
 
+- **Website**: Visit the live application at [https://metainfomapper.com/](https://metainfomapper.com/)
 - **Discord Server**: Join our community at [https://discord.gg/RX5aa2nwFd](https://discord.gg/RX5aa2nwFd) for help, feedback, and feature requests.
 - **About Page**: Visit the comprehensive about page for detailed project information and technical specifications.
 - **GitHub**: Source code and issue tracking at [https://github.com/MaineSkyPixels/Metainfo-Mapper](https://github.com/MaineSkyPixels/Metainfo-Mapper)

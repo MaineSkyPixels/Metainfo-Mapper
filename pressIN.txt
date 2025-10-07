@@ -1,0 +1,65 @@
+🚁 **MAINE SKY PIXELS LLC LAUNCHES METAINFO MAPPER: PRIVACY-FIRST DRONE IMAGERY VISUALIZATION TOOL**
+
+**October 7, 2025** - Maine Sky Pixels LLC, a Maine-based drone services company, today announced the launch of Metainfo Mapper, an innovative web application designed specifically for drone pilots and aerial photographers who need to visualize GPS metadata from their imagery while maintaining complete privacy.
+
+**Revolutionary Privacy-First Approach**
+Unlike traditional mapping tools that require uploading images to servers, Metainfo Mapper processes all data entirely in the user's browser. This means sensitive aerial imagery never leaves the user's device, ensuring complete confidentiality for commercial, government, and personal drone operations.
+
+**Key Features:**
+✅ **100% Client-Side Processing** - All EXIF parsing and KML generation happens in your browser
+✅ **Instant GPS Visualization** - Plot hundreds of geotagged images and flight paths immediately
+✅ **Export-Ready KML Files** - Generate clean KML files compatible with Google Earth, My Maps, and GIS tools
+✅ **Optional Mapbox Integration** - Add satellite imagery backgrounds with free Mapbox tokens (completely optional)
+✅ **Dark/Light Theme Support** - Professional UI with theme switching
+✅ **Session Management** - Save and load previous mapping sessions
+
+**Built for the Drone Community**
+"Metainfo Mapper was born from a real need in the drone industry," said the founder of Maine Sky Pixels LLC. "As a professional drone pilot, I understand the challenges of visualizing GPS metadata while maintaining privacy. This tool solves that problem by keeping everything local while providing powerful mapping capabilities."
+
+**Technical Innovation**
+The application uses modern web technologies including:
+- EXIF parsing with the exifr library for GPS coordinate extraction
+- Leaflet.js for interactive mapping and visualization
+- Client-side KML generation for seamless export
+- Local storage for session persistence and token management
+
+**Open Source & Community-Driven**
+Metainfo Mapper is released under the Apache License 2.0, making it free to use, modify, and distribute. The project includes a Discord community server for user support, feature requests, and collaboration.
+
+**Perfect for:**
+- Commercial drone pilots
+- Aerial photographers
+- Survey professionals
+- GIS users
+- Privacy-conscious mapping applications
+- Field workers requiring offline capabilities
+
+**Availability**
+Metainfo Mapper is now live at https://metainfomapper.com/ and available at the project's GitHub repository. The application works entirely offline once loaded, making it ideal for field operations.
+
+**About Maine Sky Pixels LLC**
+Maine Sky Pixels LLC is a Maine-based drone services company specializing in aerial photography and mapping solutions. The company is committed to developing privacy-first tools that serve the unique needs of the drone community.
+
+**Contact Information:**
+- Website: https://metainfomapper.com/
+- Email: info@maineskypixels.com
+- GitHub: https://github.com/MaineSkyPixels/Metainfo-Mapper
+- Discord: https://discord.gg/RX5aa2nwFd
+
+#DroneTech #PrivacyFirst #OpenSource #AerialPhotography #Mapping #GIS #DronePilots #Maine #Innovation #WebDevelopment #ClientSide #DataPrivacy #KML #GPS #EXIF #Leaflet #Mapbox
+
+---
+
+**Press Release Ends**
+
+**Note for LinkedIn Posting:**
+This press release is formatted for LinkedIn with:
+- Professional headline with emoji for engagement
+- Clear value proposition in the opening
+- Bullet points for easy scanning
+- Relevant hashtags for discoverability
+- Contact information for follow-up
+- Technical details to establish credibility
+- Community focus to encourage engagement
+
+**Suggested LinkedIn Post Length:** This content is optimized for LinkedIn's algorithm and user engagement patterns, providing comprehensive information while maintaining readability.
