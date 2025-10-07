@@ -69,3 +69,7 @@
 - **License Update**: Added PolyForm Noncommercial License 1.0.0 with commercial use restrictions requiring explicit permission.
 - **Performance Claims**: Updated capacity from "hundreds" to "thousands" of JPGs for more accurate performance representation.
 
+## 1.4.5 - 2025-10-07
+- **License Update**: Updated about page to reflect PolyForm Noncommercial License 1.0.0 with commercial use restrictions.
+- **Version Increment**: Updated version tracking from #100725a to #100725b.
+
