@@ -70,7 +70,7 @@ A privacy-first, client-side web application for visualizing drone imagery GPS m
 ## Community & Support
 
 - **Website**: Visit the live application at [https://metainfomapper.com/](https://metainfomapper.com/)
-- **Discord Server**: Join our community at [https://discord.gg/RX5aa2nwFd](https://discord.gg/RX5aa2nwFd) for help, feedback, and feature requests.
+- **💬 Discord Server**: Join our community at [https://discord.gg/RX5aa2nwFd](https://discord.gg/RX5aa2nwFd) for help, feedback, and feature requests.
 - **About Page**: Visit the comprehensive about page for detailed project information and technical specifications.
 - **GitHub**: Source code and issue tracking at [https://github.com/MaineSkyPixels/Metainfo-Mapper](https://github.com/MaineSkyPixels/Metainfo-Mapper)
 

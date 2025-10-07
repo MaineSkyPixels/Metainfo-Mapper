@@ -69,6 +69,22 @@
 - **License Update**: Added PolyForm Noncommercial License 1.0.0 with commercial use restrictions requiring explicit permission.
 - **Performance Claims**: Updated capacity from "hundreds" to "thousands" of JPGs for more accurate performance representation.
 
+## 1.5.0 - 2025-10-07
+- **Major Version Release**: Comprehensive UI/UX improvements and documentation enhancements.
+- **Discord Integration**: Added Discord icons (💬) to all Discord links for better visual identification.
+- **Mapbox Documentation**: Enhanced about page with detailed API optimization information including zoom restrictions and cost efficiency.
+- **Navigation Improvements**: Added return link to mapbox-token-help.html for better user experience.
+- **Version Tracking**: Updated to #100725e (October 7, 2025, fifth update).
+
+## 1.4.7 - 2025-10-07
+- **Documentation Enhancement**: Updated Mapbox section in about page to include API optimization details and cost efficiency information.
+- **Technical Details**: Added information about restricted zoom levels (15-18) and ~2,000 foot buffer for API call minimization.
+- **Version Increment**: Updated version tracking from #100725c to #100725d.
+
+## 1.4.6 - 2025-10-07
+- **UI Enhancement**: Added Discord icons (💬) to all Discord links across the application for better visual identification.
+- **Version Increment**: Updated version tracking from #100725b to #100725c.
+
 ## 1.4.5 - 2025-10-07
 - **License Update**: Updated about page to reflect PolyForm Noncommercial License 1.0.0 with commercial use restrictions.
 - **Version Increment**: Updated version tracking from #100725a to #100725b.
