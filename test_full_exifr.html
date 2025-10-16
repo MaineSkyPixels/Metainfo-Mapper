@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Full Exifr Build</title>
+    <script src="https://unpkg.com/exifr@7.1.3/dist/full.umd.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-result { border: 1px solid #ccc; margin: 20px 0; padding: 15px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        .warning { background: #fff3cd; color: #856404; }
+        button { padding: 10px 20px; margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Test Full Exifr Build</h1>
+    <p>This tool tests the FULL version of exifr to see if it can read XMP data.</p>
+    
+    <input type="file" id="file-input" multiple accept=".jpg,.jpeg,.tif,.tiff,.png,.dng,.raw,.cr2,.nef,.arw,.orf,.rw2,.pef,.srw">
+    <button onclick="testFullExifr()">Test Full Exifr</button>
+    <button onclick="clearResults()">Clear Results</button>
+    
+    <div id="results"></div>
+
+    <script>
+        async function testFullExifr() {
+            const files = document.getElementById('file-input').files;
+            const resultsDiv = document.getElementById('results');
+            
+            if (files.length === 0) {
+                alert('Please select some images to process');
+                return;
+            }
+
+            resultsDiv.innerHTML = '<h2>Testing full exifr build...</h2>';
+
+            for (const file of files) {
+                try {
+                    // Test with full exifr and all parsing options
+                    const arrayBuffer = await file.arrayBuffer();
+                    const fullData = await exifr.parse(arrayBuffer, { 
+                        gps: true, 
+                        xmp: true, 
+                        iptc: true, 
+                        icc: true 
+                    });
+                    
+                    displayFullExifrResults(file.name, fullData);
+                } catch (error) {
+                    resultsDiv.innerHTML += `
+                        <div class="test-result error">
+                            <h3>${file.name}</h3>
+                            <p><strong>Error:</strong> ${error.message}</p>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        function displayFullExifrResults(filename, fullData) {
+            const resultsDiv = document.getElementById('results');
+            
+            const totalFields = Object.keys(fullData || {}).length;
+            
+            // Separate fields by type
+            const xmpFields = [];
+            const rtkFields = [];
+            const djiFields = [];
+            const gpsFields = [];
+            
+            for (const [key, value] of Object.entries(fullData || {})) {
+                if (key.startsWith('Xmp.')) {
+                    xmpFields.push({ key, value });
+                    
+                    // Check for RTK-related fields
+                    if (key.toLowerCase().includes('rtk') || 
+                        key.toLowerCase().includes('accuracy') ||
+                        key.toLowerCase().includes('differential') ||
+                        key.toLowerCase().includes('correction') ||
+                        key.toLowerCase().includes('std')) {
+                        rtkFields.push({ key, value });
+                    }
+                    
+                    // Check for DJI-related fields
+                    if (key.toLowerCase().includes('dji') || 
+                        key.toLowerCase().includes('drone') ||
+                        key.toLowerCase().includes('selfdata') ||
+                        key.toLowerCase().includes('zenmuse')) {
+                        djiFields.push({ key, value });
+                    }
+                }
+                
+                // Check for GPS fields
+                if (key.toLowerCase().includes('gps')) {
+                    gpsFields.push({ key, value });
+                }
+            }
+            
+            let html = `
+                <div class="test-result">
+                    <h3>${filename}</h3>
+                    <p><strong>Camera:</strong> ${fullData?.Make || 'N/A'} ${fullData?.Model || 'N/A'}</p>
+                    <p><strong>Total fields:</strong> ${totalFields}</p>
+                    
+                    <div class="info">
+                        <h4>📊 Field Breakdown:</h4>
+                        <p><strong>XMP fields:</strong> ${xmpFields.length}</p>
+                        <p><strong>GPS fields:</strong> ${gpsFields.length}</p>
+                        <p><strong>RTK-related fields:</strong> ${rtkFields.length}</p>
+                        <p><strong>DJI-related fields:</strong> ${djiFields.length}</p>
+                    </div>
+            `;
+
+            // Show RTK fields
+            if (rtkFields.length > 0) {
+                html += `
+                    <div class="success">
+                        <h4>🎯 RTK Fields Found (${rtkFields.length}):</h4>`;
+                for (const field of rtkFields) {
+                    html += `<p><strong>${field.key}:</strong> ${field.value}</p>`;
+                }
+                html += `</div>`;
+            } else {
+                html += `
+                    <div class="warning">
+                        <h4>⚠️ No RTK Fields Found</h4>
+                        <p>No RTK-related fields were found in the XMP data.</p>
+                    </div>
+                `;
+            }
+
+            // Show DJI fields
+            if (djiFields.length > 0) {
+                html += `
+                    <div class="info">
+                        <h4>🚁 DJI Fields Found (${djiFields.length}):</h4>`;
+                for (const field of djiFields) {
+                    html += `<p><strong>${field.key}:</strong> ${field.value}</p>`;
+                }
+                html += `</div>`;
+            }
+
+            // Show first few XMP fields
+            if (xmpFields.length > 0) {
+                html += `
+                    <div class="info">
+                        <h4>📋 XMP Fields (showing first 10 of ${xmpFields.length}):</h4>`;
+                for (const field of xmpFields.slice(0, 10)) {
+                    html += `<p><strong>${field.key}:</strong> ${field.value}</p>`;
+                }
+                if (xmpFields.length > 10) {
+                    html += `<p><em>... and ${xmpFields.length - 10} more XMP fields</em></p>`;
+                }
+                html += `</div>`;
+            } else {
+                html += `
+                    <div class="error">
+                        <h4>❌ No XMP Fields Found</h4>
+                        <p>Even with the full exifr build, no XMP fields were found.</p>
+                        <p>This could mean:</p>
+                        <ul>
+                            <li>The image doesn't contain XMP data</li>
+                            <li>The XMP data is in a format exifr can't read</li>
+                            <li>We need a different approach to read the metadata</li>
+                        </ul>
+                    </div>
+                `;
+            }
+
+            html += `</div>`;
+            resultsDiv.innerHTML += html;
+        }
+
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+    </script>
+</body>
+</html>

@@ -36,12 +36,12 @@
 
             // Define the exact fields our implementation looks for
             const ourRtkFields = {
-                // DJI XMP SelfData RTK fields (primary)
-                'Xmp.SelfData.RtkFlag': 'DJI RTK Flag (XMP SelfData)',
-                'Xmp.SelfData.RtkStdLon': 'DJI RTK Longitude Std Dev (XMP SelfData)',
-                'Xmp.SelfData.RtkStdLat': 'DJI RTK Latitude Std Dev (XMP SelfData)',
-                'Xmp.SelfData.RtkStdHgt': 'DJI RTK Height Std Dev (XMP SelfData)',
-                'Xmp.SelfData.RtkDiffAge': 'DJI RTK Diff Age (XMP SelfData)',
+                // DJI RTK fields (primary - actual field names found)
+                'RtkFlag': 'DJI RTK Flag',
+                'RtkStdLon': 'DJI RTK Longitude Std Dev',
+                'RtkStdLat': 'DJI RTK Latitude Std Dev',
+                'RtkStdHgt': 'DJI RTK Height Std Dev',
+                'RtkDiffAge': 'DJI RTK Diff Age',
                 
                 // Standard RTK fields
                 'RTKStatus': 'RTK positioning status',

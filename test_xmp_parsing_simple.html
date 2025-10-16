@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple XMP Parsing Test</title>
+    <script src="https://unpkg.com/exifr@7.1.3/dist/lite.umd.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-result { border: 1px solid #ccc; margin: 20px 0; padding: 15px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        button { padding: 10px 20px; margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Simple XMP Parsing Test</h1>
+    <p>This tool tests if XMP parsing is working at all with the exifr lite version.</p>
+    
+    <input type="file" id="file-input" multiple accept=".jpg,.jpeg,.tif,.tiff,.png,.dng,.raw,.cr2,.nef,.arw,.orf,.rw2,.pef,.srw">
+    <button onclick="testXMPParsing()">Test XMP Parsing</button>
+    <button onclick="clearResults()">Clear Results</button>
+    
+    <div id="results"></div>
+
+    <script>
+        async function testXMPParsing() {
+            const files = document.getElementById('file-input').files;
+            const resultsDiv = document.getElementById('results');
+            
+            if (files.length === 0) {
+                alert('Please select some images to process');
+                return;
+            }
+
+            resultsDiv.innerHTML = '<h2>Testing XMP parsing...</h2>';
+
+            for (const file of files) {
+                try {
+                    // Test 1: Basic parsing (GPS only)
+                    const arrayBuffer = await file.arrayBuffer();
+                    const basicData = await exifr.parse(arrayBuffer, { gps: true });
+                    
+                    // Test 2: XMP parsing
+                    const xmpData = await exifr.parse(arrayBuffer, { gps: true, xmp: true });
+                    
+                    // Test 3: All parsing options
+                    const allData = await exifr.parse(arrayBuffer, { gps: true, xmp: true, iptc: true, icc: true });
+                    
+                    displayTestResults(file.name, basicData, xmpData, allData);
+                } catch (error) {
+                    resultsDiv.innerHTML += `
+                        <div class="test-result error">
+                            <h3>${file.name}</h3>
+                            <p><strong>Error:</strong> ${error.message}</p>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        function displayTestResults(filename, basicData, xmpData, allData) {
+            const resultsDiv = document.getElementById('results');
+            
+            const basicCount = Object.keys(basicData || {}).length;
+            const xmpCount = Object.keys(xmpData || {}).length;
+            const allCount = Object.keys(allData || {}).length;
+            
+            let html = `
+                <div class="test-result">
+                    <h3>${filename}</h3>
+                    <p><strong>Camera:</strong> ${basicData?.Make || 'N/A'} ${basicData?.Model || 'N/A'}</p>
+                    
+                    <div class="info">
+                        <h4>📊 Field Count Comparison:</h4>
+                        <p><strong>Basic (GPS only):</strong> ${basicCount} fields</p>
+                        <p><strong>With XMP:</strong> ${xmpCount} fields</p>
+                        <p><strong>With All:</strong> ${allCount} fields</p>
+                        <p><strong>XMP fields added:</strong> ${xmpCount - basicCount}</p>
+                    </div>
+            `;
+
+            // Check if XMP parsing worked
+            if (xmpCount > basicCount) {
+                html += `
+                    <div class="success">
+                        <h4>✅ XMP Parsing Working!</h4>
+                        <p>XMP parsing added ${xmpCount - basicCount} fields.</p>
+                    </div>
+                `;
+                
+                // Show XMP fields
+                const xmpFields = [];
+                for (const [key, value] of Object.entries(xmpData || {})) {
+                    if (key.startsWith('Xmp.') || key.includes('XMP')) {
+                        xmpFields.push({ key, value });
+                    }
+                }
+                
+                if (xmpFields.length > 0) {
+                    html += `
+                        <div class="info">
+                            <h4>📋 XMP Fields Found (${xmpFields.length}):</h4>`;
+                    for (const field of xmpFields.slice(0, 10)) { // Show first 10
+                        html += `<p><strong>${field.key}:</strong> ${field.value}</p>`;
+                    }
+                    if (xmpFields.length > 10) {
+                        html += `<p><em>... and ${xmpFields.length - 10} more XMP fields</em></p>`;
+                    }
+                    html += `</div>`;
+                }
+            } else {
+                html += `
+                    <div class="error">
+                        <h4>❌ XMP Parsing Not Working</h4>
+                        <p>XMP parsing didn't add any fields. The lite version of exifr may not support XMP parsing.</p>
+                        <p><strong>Solution:</strong> We need to use the full version of exifr or find an alternative approach.</p>
+                    </div>
+                `;
+            }
+
+            // Check for errors with all parsing
+            if (allCount === xmpCount) {
+                html += `
+                    <div class="info">
+                        <h4>ℹ️ Additional Parsing Info:</h4>
+                        <p>Adding IPTC and ICC parsing didn't increase field count (likely due to lite version limitations).</p>
+                    </div>
+                `;
+            }
+
+            html += `</div>`;
+            resultsDiv.innerHTML += html;
+        }
+
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+    </script>
+</body>
+</html>

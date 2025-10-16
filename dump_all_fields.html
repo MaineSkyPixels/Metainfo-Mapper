@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dump All Fields - Full Exifr</title>
+    <script src="https://unpkg.com/exifr@7.1.3/dist/full.umd.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .result { border: 1px solid #ccc; margin: 20px 0; padding: 15px; }
+        .field-dump { background: #f8f9fa; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .field-item { margin: 2px 0; font-family: monospace; font-size: 11px; }
+        .field-name { color: #0066cc; font-weight: bold; }
+        .field-value { color: #333; }
+        .field-type { color: #666; font-style: italic; }
+        .summary { background: #e3f2fd; padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .highlight { background: #fff3cd; padding: 2px 4px; border-radius: 3px; }
+        button { padding: 10px 20px; margin: 5px; }
+        .search-box { margin: 10px 0; }
+        .search-box input { padding: 5px; width: 300px; }
+    </style>
+</head>
+<body>
+    <h1>Dump All Fields - Full Exifr</h1>
+    <p>This tool dumps ALL fields that the full exifr can read from your images.</p>
+    
+    <input type="file" id="file-input" multiple accept=".jpg,.jpeg,.tif,.tiff,.png,.dng,.raw,.cr2,.nef,.arw,.orf,.rw2,.pef,.srw">
+    <button onclick="dumpAllFields()">Dump All Fields</button>
+    <button onclick="clearResults()">Clear Results</button>
+    
+    <div class="search-box">
+        <input type="text" id="search-input" placeholder="Search for specific field names..." onkeyup="filterFields()">
+    </div>
+    
+    <div id="results"></div>
+
+    <script>
+        let allFieldsData = [];
+
+        async function dumpAllFields() {
+            const files = document.getElementById('file-input').files;
+            const resultsDiv = document.getElementById('results');
+            
+            if (files.length === 0) {
+                alert('Please select some images to process');
+                return;
+            }
+
+            resultsDiv.innerHTML = '<h2>Dumping all fields...</h2>';
+
+            for (const file of files) {
+                try {
+                    const arrayBuffer = await file.arrayBuffer();
+                    
+                    // Try with all parsing options
+                    const fullData = await exifr.parse(arrayBuffer, { 
+                        gps: true, 
+                        xmp: true, 
+                        iptc: true, 
+                        icc: true 
+                    });
+                    
+                    displayAllFields(file.name, fullData);
+                } catch (error) {
+                    resultsDiv.innerHTML += `
+                        <div class="result">
+                            <h3>${file.name}</h3>
+                            <p style="color: red;"><strong>Error:</strong> ${error.message}</p>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        function displayAllFields(filename, fullData) {
+            const resultsDiv = document.getElementById('results');
+            
+            // Convert to array and sort
+            const fields = Object.entries(fullData || {});
+            fields.sort((a, b) => a[0].localeCompare(b[0]));
+            
+            // Store for filtering
+            allFieldsData = fields;
+            
+            // Categorize fields
+            const categories = {
+                xmp: [],
+                gps: [],
+                exif: [],
+                tiff: [],
+                maker: [],
+                other: []
+            };
+            
+            fields.forEach(([key, value]) => {
+                const keyLower = key.toLowerCase();
+                if (keyLower.startsWith('xmp.')) {
+                    categories.xmp.push([key, value]);
+                } else if (keyLower.includes('gps')) {
+                    categories.gps.push([key, value]);
+                } else if (keyLower.startsWith('exif.')) {
+                    categories.exif.push([key, value]);
+                } else if (keyLower.startsWith('tiff.')) {
+                    categories.tiff.push([key, value]);
+                } else if (keyLower.includes('maker') || keyLower.includes('dji')) {
+                    categories.maker.push([key, value]);
+                } else {
+                    categories.other.push([key, value]);
+                }
+            });
+            
+            let html = `
+                <div class="result">
+                    <h3>${filename}</h3>
+                    <p><strong>Camera:</strong> ${fullData?.Make || 'N/A'} ${fullData?.Model || 'N/A'}</p>
+                    
+                    <div class="summary">
+                        <h4>📊 Field Summary (${fields.length} total):</h4>
+                        <p><strong>XMP:</strong> ${categories.xmp.length} fields</p>
+                        <p><strong>GPS:</strong> ${categories.gps.length} fields</p>
+                        <p><strong>EXIF:</strong> ${categories.exif.length} fields</p>
+                        <p><strong>TIFF:</strong> ${categories.tiff.length} fields</p>
+                        <p><strong>Maker Notes:</strong> ${categories.maker.length} fields</p>
+                        <p><strong>Other:</strong> ${categories.other.length} fields</p>
+                    </div>
+            `;
+
+            // Show each category
+            for (const [categoryName, categoryFields] of Object.entries(categories)) {
+                if (categoryFields.length > 0) {
+                    html += `
+                        <div class="field-dump">
+                            <h4>${categoryName.toUpperCase()} Fields (${categoryFields.length}):</h4>
+                    `;
+                    
+                    for (const [key, value] of categoryFields) {
+                        const valueType = typeof value;
+                        const valueStr = valueType === 'object' ? JSON.stringify(value) : String(value);
+                        const highlightedKey = highlightSearchTerm(key);
+                        const highlightedValue = highlightSearchTerm(valueStr);
+                        
+                        html += `
+                            <div class="field-item">
+                                <span class="field-name">${highlightedKey}</span>: 
+                                <span class="field-value">${highlightedValue}</span>
+                                <span class="field-type"> (${valueType})</span>
+                            </div>
+                        `;
+                    }
+                    
+                    html += `</div>`;
+                }
+            }
+
+            // Show all fields in one section for easy searching
+            html += `
+                <div class="field-dump">
+                    <h4>🔍 ALL FIELDS (for searching):</h4>
+                    <p><em>Use the search box above to filter these fields</em></p>
+            `;
+            
+            for (const [key, value] of fields) {
+                const valueType = typeof value;
+                const valueStr = valueType === 'object' ? JSON.stringify(value) : String(value);
+                const highlightedKey = highlightSearchTerm(key);
+                const highlightedValue = highlightSearchTerm(valueStr);
+                
+                html += `
+                    <div class="field-item">
+                        <span class="field-name">${highlightedKey}</span>: 
+                        <span class="field-value">${highlightedValue}</span>
+                        <span class="field-type"> (${valueType})</span>
+                    </div>
+                `;
+            }
+            
+            html += `</div></div>`;
+            resultsDiv.innerHTML += html;
+        }
+
+        function highlightSearchTerm(text) {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            if (!searchTerm) return text;
+            
+            const regex = new RegExp(`(${searchTerm})`, 'gi');
+            return text.replace(regex, '<span class="highlight">$1</span>');
+        }
+
+        function filterFields() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const fieldItems = document.querySelectorAll('.field-item');
+            
+            fieldItems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = searchTerm ? 'none' : 'block';
+                }
+            });
+            
+            // Update highlights
+            const fieldNames = document.querySelectorAll('.field-name');
+            const fieldValues = document.querySelectorAll('.field-value');
+            
+            fieldNames.forEach(el => {
+                el.innerHTML = highlightSearchTerm(el.textContent);
+            });
+            
+            fieldValues.forEach(el => {
+                el.innerHTML = highlightSearchTerm(el.textContent);
+            });
+        }
+
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+            allFieldsData = [];
+        }
+    </script>
+</body>
+</html>
