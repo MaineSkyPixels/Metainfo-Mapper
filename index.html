@@ -34,10 +34,10 @@
 
             <div id="upload-section" style="display:none;">
                 <h3>Add Images</h3>
-                <p class="hint">Drag in JPG/JPEG files or entire folders — processing happens locally in your browser.</p>
+                <p class="hint">Drag in image files (JPG, TIFF, PNG, RAW formats) or entire folders — processing happens locally in your browser.</p>
                 <div id="drop-zone">
                     <p>Drop images/folders here<br>or click to browse</p>
-                    <input type="file" id="file-input" multiple accept=".jpg,.jpeg" style="display:none;">
+                    <input type="file" id="file-input" multiple accept=".jpg,.jpeg,.tif,.tiff,.png,.dng,.raw,.cr2,.nef,.arw,.orf,.rw2,.pef,.srw" style="display:none;">
                 </div>
                 <button id="select-folder" class="secondary-btn">Select Folder (Browser)</button>
                 <input type="file" id="folder-input" webkitdirectory directory style="display:none;">
@@ -91,10 +91,10 @@
                 <p><strong>Maine Sky Pixels LLC</strong></p>
                 <p>Questions? Email <a href="mailto:info@maineskypixels.com">info@maineskypixels.com</a></p>
                 <p>GitHub: <a href="https://github.com/MaineSkyPixels" target="_blank" rel="noopener">https://github.com/MaineSkyPixels</a></p>
-                <p><a href="https://discord.gg/RX5aa2nwFd" target="_blank" rel="noopener" class="learn-link">💬 Join the Discord server</a></p>
+                <p><a href="https://discord.gg/975xxNXgMn" target="_blank" rel="noopener" class="learn-link">💬 Join the Discord server</a></p>
                 <p><a href="about.html" class="learn-link">Learn more about this project →</a></p>
                 <p class="owner-foot">© Copyright Maine Sky Pixels 2025</p>
-                <p class="owner-foot">Version #100725e</p>
+                <p class="owner-foot">Version #101250a</p>
             </div>
 
         </div>
@@ -103,16 +103,16 @@
             <div id="map-about-card" class="map-about-card">
                 <h3>What it does</h3>
                 <ul>
-                    <li>Plot geotagged imagery and flight paths instantly in your browser.</li>
+                    <li>Plot geotagged imagery and flight paths instantly in your browser from JPG, TIFF, PNG, and RAW formats.</li>
                     <li>Export clean KML ready for Earth, My Maps, or your GIS tools.</li>
                     <li>Spot GPS gaps quickly so you can troubleshoot metadata issues.</li>
                     <li><a href="about.html" class="learn-link">Learn more about this project</a></li>
-                    <li><a href="https://discord.gg/RX5aa2nwFd" target="_blank" rel="noopener" class="learn-link">💬 Join the Metainfo Mapper Discord server</a></li>
+                    <li><a href="https://discord.gg/975xxNXgMn" target="_blank" rel="noopener" class="learn-link">💬 Join the Metainfo Mapper Discord server</a></li>
                     <li>This project is still in active development and bugs may occur.</li>
                 </ul>
             </div>
             <div id="map-intro-card" class="map-intro-card">
-                <p><strong>Metainfo Mapper</strong> is an open-source side project built by a Maine-based drone pilot. The app extracts GPS metadata entirely in your browser, keeps everything on your device, working entirely in-memory with zero logging.</p>
+                <p><strong>Metainfo Mapper</strong> is an open-source side project built by a Maine-based drone pilot. The app extracts GPS metadata from JPG, TIFF, PNG, and RAW images entirely in your browser, keeps everything on your device, working entirely in-memory with zero logging.</p>
                 <div class="pill-row">
                     <span class="pill">100% client-side EXIF parsing</span>
                     <span class="pill">No tracking &middot; No uploads</span>
@@ -138,7 +138,7 @@
     <div id="privacy-modal" class="modal" style="display:none;">
         <div class="modal-content wide">
             <h2>Your photos never leave this browser</h2>
-            <p>Metainfo Mapper runs entirely on your device. After the page loads, it works 100% offline until you close the tab, with no logging, uploads, or analytics.</p>
+            <p>Metainfo Mapper runs entirely on your device. After the page loads, it works 100% offline until you close the tab, with no logging, uploads, or analytics. Supports JPG, TIFF, PNG, and RAW image formats.</p>
             <ul>
                 <li>No images or metadata are stored on disk.</li>
                 <li>Processing is done locally using open-source libraries.</li>
@@ -152,6 +152,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/exifr/dist/lite.umd.min.js"></script>
+    <!-- exifr library version 2.1.1+ required for TIFF support -->
     <script src="js/app.js"></script>
 </body>
 </html>

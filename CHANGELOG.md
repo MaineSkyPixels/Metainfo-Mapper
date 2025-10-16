@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.6.0 - 2025-01-XX
+- **Expanded Image Format Support**: Added support for TIFF (.tif, .tiff), PNG, and RAW formats (DNG, CR2, NEF, ARW, ORF, RW2, PEF, SRW) in addition to existing JPG support.
+- **Enhanced File Processing**: Updated file filtering logic to handle broader range of image formats with GPS metadata.
+- **Updated Documentation**: Revised all documentation, help pages, and UI messaging to reflect expanded format support.
+- **exifr Library Compatibility**: Added notes about exifr library version 2.1.1+ requirement for TIFF support.
+- **Improved User Experience**: Enhanced error messages to clearly list all supported formats when no compatible files are found.
+
 ## 1.5.0 - 2025-10-07
 - **Major Version Release**: Comprehensive UI/UX improvements and documentation enhancements.
 - **Discord Integration**: Added Discord icons (💬) to all Discord links for better visual identification.
@@ -39,7 +46,7 @@
   - Updated Basemap Token section with clearer privacy messaging
   - Added "(Optional)" to Basemap Token title for clarity
   - Improved font sizing and emphasis in token configuration section
-- **Community Integration**: Added Discord server link (https://discord.gg/RX5aa2nwFd) for user community and support.
+- **Community Integration**: Added Discord server link (https://discord.gg/975xxNXgMn) for user community and support.
 - **Version Tracking**: Implemented version numbering system (#100725a format) for tracking updates.
 - **Privacy Enhancements**: Clarified Mapbox token handling with detailed explanation of direct browser-to-Mapbox communication.
 - **Development Status Notices**: Added clear warnings about active development status in both main app and about page.

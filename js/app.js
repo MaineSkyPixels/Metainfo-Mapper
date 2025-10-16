@@ -1,7 +1,7 @@
 /**
  * Metainfo Mapper - Client-side drone imagery GPS metadata visualization
- * Version: 1.5.0
- * Build: #100725e
+ * Version: 1.6.0
+ * Build: #101250a
  * 
  * A privacy-first web application for visualizing drone imagery GPS metadata
  * while keeping all data processing entirely in the browser.
@@ -751,13 +751,20 @@
         async handleFiles(files) {
             if (this.isProcessing) return;
 
-            const jpgFiles = Array.from(files).filter(file => 
-                file.name.toLowerCase().endsWith('.jpg') || 
-                file.name.toLowerCase().endsWith('.jpeg')
-            );
+            // Define supported image formats
+            const supportedFormats = [
+                '.jpg', '.jpeg', '.tif', '.tiff', '.png', 
+                '.dng', '.raw', '.cr2', '.nef', '.arw', 
+                '.orf', '.rw2', '.pef', '.srw'
+            ];
 
-            if (jpgFiles.length === 0) {
-                alert('No JPG images found');
+            const imageFiles = Array.from(files).filter(file => {
+                const fileName = file.name.toLowerCase();
+                return supportedFormats.some(format => fileName.endsWith(format));
+            });
+
+            if (imageFiles.length === 0) {
+                alert('No supported image files found. Supported formats: JPG, TIFF, PNG, RAW formats (DNG, CR2, NEF, ARW, ORF, RW2, PEF, SRW)');
                 return;
             }
 
@@ -765,12 +772,12 @@
             this.kmlData = null;
             this.toggleMyMapsGuidance(false);
             this.initThemeToggle();
-            this.setProcessingState(true, jpgFiles.length);
+            this.setProcessingState(true, imageFiles.length);
             document.getElementById('upload-section').style.display = 'none';
 
             let processedCount = 0;
 
-            for (const file of jpgFiles) {
+            for (const file of imageFiles) {
                 try {
                     const result = await this.extractExifFromFile(file);
                     if (result.success) {
@@ -791,7 +798,7 @@
                 }
 
                 processedCount += 1;
-                this.updateProgress(processedCount, jpgFiles.length);
+                this.updateProgress(processedCount, imageFiles.length);
             }
 
             this.sortImageData();
@@ -894,6 +901,8 @@
 
         /**
          * Extract EXIF data from file
+         * Supports: JPG, TIFF, PNG, RAW formats (DNG, CR2, NEF, ARW, ORF, RW2, PEF, SRW)
+         * Note: exifr library supports TIFF formats since version 2.1.1+
          */
         async extractExifFromFile(file) {
             const arrayBuffer = await file.arrayBuffer();

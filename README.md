@@ -18,7 +18,7 @@ A privacy-first, client-side web application for visualizing drone imagery GPS m
 
 - **Dark-first UI** – switch between dark and light themes with a single click.
 - **Browser-only workflow** – EXIF parsing and KML generation happen entirely in the user's browser, so no media is uploaded.
-- **Instant previews** – Load thousands of JPGs and visualise metadata immediately, even when you stay offline.
+- **Instant previews** – Load thousands of images (JPG, TIFF, PNG, RAW) and visualise metadata immediately, even when you stay offline.
 - **Mission storytelling** – Build sessions, visualise paths, surface GPS gaps, and export shareable KML in seconds.
 - **Blank canvas default** – Images are plotted on a clean canvas with georeferenced positioning by default.
 - **Optional Mapbox integration** – Add satellite imagery backgrounds with a free Mapbox token (completely optional).
@@ -27,7 +27,7 @@ A privacy-first, client-side web application for visualizing drone imagery GPS m
 
 ## Prerequisites
 
-- JPG/JPEG images containing GPS EXIF metadata
+- Image files containing GPS EXIF metadata (JPG, TIFF, PNG, RAW formats)
 
 ## Installation & Launch
 
@@ -35,7 +35,7 @@ A privacy-first, client-side web application for visualizing drone imagery GPS m
 ## Usage
 
 1. Name your mission and click **Start New Session**.
-2. Drag-and-drop JPGs or choose a folder; EXIF is parsed locally.
+2. Drag-and-drop image files (JPG, TIFF, PNG, RAW) or choose a folder; EXIF is parsed locally.
 3. Inspect markers, paths, and GPS gaps directly on the map.
 4. Export the session as KML or download the error log for documentation.
 5. Click **Open in Google My Maps** to download the latest KML and launch My Maps, then choose "Create a new map" → "Import" and select the downloaded file.
@@ -70,7 +70,7 @@ A privacy-first, client-side web application for visualizing drone imagery GPS m
 ## Community & Support
 
 - **Website**: Visit the live application at [https://metainfomapper.com/](https://metainfomapper.com/)
-- **💬 Discord Server**: Join our community at [https://discord.gg/RX5aa2nwFd](https://discord.gg/RX5aa2nwFd) for help, feedback, and feature requests.
+- **💬 Discord Server**: Join our community at [https://discord.gg/975xxNXgMn](https://discord.gg/975xxNXgMn) for help, feedback, and feature requests.
 - **About Page**: Visit the comprehensive about page for detailed project information and technical specifications.
 - **GitHub**: Source code and issue tracking at [https://github.com/MaineSkyPixels/Metainfo-Mapper](https://github.com/MaineSkyPixels/Metainfo-Mapper)
 
@@ -81,7 +81,8 @@ A privacy-first, client-side web application for visualizing drone imagery GPS m
 ## Notes
 
 - Large batches rely on browser memory; split uploads if your hardware is constrained.
+- Supported formats: JPG, TIFF, PNG, and RAW formats (DNG, CR2, NEF, ARW, ORF, RW2, PEF, SRW).
 - Consider self-hosting Leaflet/JSZip/exifr bundles for completely offline environments.
-- Version tracking: Current version #100725a (MMDDYY + update letter format)
+- Version tracking: Current version #101250a (MMDDYY + update letter format)
 - Regenerate the client bundle with `npm run build:client` before redeploying.
 
