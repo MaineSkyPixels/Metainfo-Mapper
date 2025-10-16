@@ -39,8 +39,7 @@
                     const arrayBuffer = await file.arrayBuffer();
                     const exifData = await exifr.parse(arrayBuffer, { 
                         gps: true,
-                        xmp: true,
-                        iptc: true
+                        xmp: true
                     });
                     
                     displayImageAnalysis(file.name, exifData);

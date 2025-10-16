@@ -39,8 +39,7 @@
                     const arrayBuffer = await file.arrayBuffer();
                     const exifDataWithXMP = await exifr.parse(arrayBuffer, { 
                         gps: true,
-                        xmp: true,
-                        iptc: true
+                        xmp: true
                     });
                     
                     // Test without XMP for comparison

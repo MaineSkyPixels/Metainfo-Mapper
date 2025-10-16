@@ -920,8 +920,7 @@
             // Enable XMP parsing to read DJI RTK data
             const exifData = await exifr.parse(arrayBuffer, { 
                 gps: true,
-                xmp: true,
-                iptc: true
+                xmp: true
             });
 
             if (!exifData || typeof exifData.latitude !== 'number' || typeof exifData.longitude !== 'number') {

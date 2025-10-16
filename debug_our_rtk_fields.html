@@ -75,8 +75,7 @@
                     const arrayBuffer = await file.arrayBuffer();
                     const exifData = await exifr.parse(arrayBuffer, { 
                         gps: true,
-                        xmp: true,
-                        iptc: true
+                        xmp: true
                     });
                     
                     displayFieldTest(file.name, exifData, ourRtkFields);
