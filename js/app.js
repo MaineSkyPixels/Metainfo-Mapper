@@ -1669,20 +1669,26 @@ ${this.errorData.map(error => `
          * Setup smart tooltip positioning to keep tooltips within browser window
          */
         setupSmartTooltips() {
-            const helpIcons = document.querySelectorAll('.help-icon');
-            
-            helpIcons.forEach(icon => {
-                icon.addEventListener('mouseenter', () => {
-                    this.positionTooltip(icon);
-                });
+            // Use a small delay to ensure DOM is fully ready
+            setTimeout(() => {
+                const helpIcons = document.querySelectorAll('.help-icon');
+                console.log('Found help icons:', helpIcons.length);
                 
-                // Update position on window resize
-                window.addEventListener('resize', () => {
-                    if (icon.matches(':hover')) {
+                helpIcons.forEach((icon, index) => {
+                    console.log(`Setting up tooltip for icon ${index}`);
+                    icon.addEventListener('mouseenter', () => {
+                        console.log('Mouse entered help icon, positioning tooltip');
                         this.positionTooltip(icon);
-                    }
+                    });
+                    
+                    // Update position on window resize
+                    window.addEventListener('resize', () => {
+                        if (icon.matches(':hover')) {
+                            this.positionTooltip(icon);
+                        }
+                    });
                 });
-            });
+            }, 100);
         }
 
         /**
@@ -1694,6 +1700,13 @@ ${this.errorData.map(error => `
             const tooltipWidth = 400; // Match CSS width
             const margin = 50; // Increased safety margin
             
+            console.log('Positioning tooltip:', {
+                rectLeft: rect.left,
+                rectRight: rect.right,
+                viewportWidth: viewportWidth,
+                tooltipWidth: tooltipWidth
+            });
+            
             // Remove any existing positioning classes
             icon.classList.remove('tooltip-left', 'tooltip-right');
             
@@ -1701,15 +1714,25 @@ ${this.errorData.map(error => `
             const leftOverflow = rect.left - (tooltipWidth / 2) < margin;
             const rightOverflow = rect.right + (tooltipWidth / 2) > viewportWidth - margin;
             
+            console.log('Overflow calculations:', {
+                leftOverflow: leftOverflow,
+                rightOverflow: rightOverflow,
+                leftDistance: rect.left,
+                rightDistance: viewportWidth - rect.right
+            });
+            
             // Only apply positioning if there's significant overflow
             if (leftOverflow && !rightOverflow && rect.left < tooltipWidth) {
                 // Only position right if icon is very close to left edge
+                console.log('Applying tooltip-right class');
                 icon.classList.add('tooltip-right');
             } else if (rightOverflow && !leftOverflow && (viewportWidth - rect.right) < tooltipWidth) {
                 // Only position left if icon is very close to right edge
+                console.log('Applying tooltip-left class');
                 icon.classList.add('tooltip-left');
+            } else {
+                console.log('Using default centered positioning');
             }
-            // Default centered position if no significant overflow
         }
     }
 
