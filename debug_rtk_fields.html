@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug RTK Fields</title>
+    <script src="https://unpkg.com/exifr@7.1.3/dist/lite.umd.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .image-result { border: 1px solid #ccc; margin: 20px 0; padding: 15px; }
+        .all-fields { background: #f9f9f9; padding: 10px; margin: 10px 0; font-family: monospace; font-size: 12px; }
+        .rtk-related { background: #fff3cd; padding: 5px; margin: 5px 0; }
+        .gps-related { background: #d1ecf1; padding: 5px; margin: 5px 0; }
+        button { padding: 10px 20px; margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Debug RTK EXIF Fields</h1>
+    <p>This tool will examine ALL EXIF fields to find RTK-related data in the sample images.</p>
+    
+    <input type="file" id="file-input" multiple accept=".jpg,.jpeg,.tif,.tiff,.png,.dng,.raw,.cr2,.nef,.arw,.orf,.rw2,.pef,.srw">
+    <button onclick="processImages()">Process Images</button>
+    <button onclick="clearResults()">Clear Results</button>
+    
+    <div id="results"></div>
+
+    <script>
+        async function processImages() {
+            const files = document.getElementById('file-input').files;
+            const resultsDiv = document.getElementById('results');
+            
+            if (files.length === 0) {
+                alert('Please select some images to process');
+                return;
+            }
+
+            resultsDiv.innerHTML = '<h2>Processing images...</h2>';
+
+            for (const file of files) {
+                try {
+                    const arrayBuffer = await file.arrayBuffer();
+                    const exifData = await exifr.parse(arrayBuffer);
+                    
+                    displayImageAnalysis(file.name, exifData);
+                } catch (error) {
+                    resultsDiv.innerHTML += `
+                        <div class="image-result">
+                            <h3>${file.name}</h3>
+                            <p style="color: red;">Error: ${error.message}</p>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        function displayImageAnalysis(filename, exifData) {
+            const resultsDiv = document.getElementById('results');
+            
+            let html = `
+                <div class="image-result">
+                    <h3>${filename}</h3>
+                    <p><strong>Camera:</strong> ${exifData?.Make || 'N/A'} ${exifData?.Model || 'N/A'}</p>
+            `;
+
+            // Extract RTK-related fields
+            const rtkFields = {};
+            const gpsFields = {};
+            const allFields = {};
+
+            // Get all EXIF keys and values
+            for (const [key, value] of Object.entries(exifData || {})) {
+                allFields[key] = value;
+                
+                // Check for RTK-related keywords
+                if (key.toLowerCase().includes('rtk') || 
+                    key.toLowerCase().includes('accuracy') ||
+                    key.toLowerCase().includes('differential') ||
+                    key.toLowerCase().includes('correction') ||
+                    key.toLowerCase().includes('dop')) {
+                    rtkFields[key] = value;
+                }
+                
+                // Check for GPS-related keywords
+                if (key.toLowerCase().includes('gps')) {
+                    gpsFields[key] = value;
+                }
+            }
+
+            // Display RTK-related fields
+            if (Object.keys(rtkFields).length > 0) {
+                html += `<h4 style="color: orange;">RTK-Related Fields Found:</h4>`;
+                for (const [key, value] of Object.entries(rtkFields)) {
+                    html += `<div class="rtk-related"><strong>${key}:</strong> ${value}</div>`;
+                }
+            } else {
+                html += `<p style="color: red;">No RTK-related fields found</p>`;
+            }
+
+            // Display GPS fields
+            if (Object.keys(gpsFields).length > 0) {
+                html += `<h4 style="color: blue;">GPS Fields:</h4>`;
+                for (const [key, value] of Object.entries(gpsFields)) {
+                    html += `<div class="gps-related"><strong>${key}:</strong> ${value}</div>`;
+                }
+            }
+
+            // Display ALL fields for debugging
+            html += `<h4>All EXIF Fields (for debugging):</h4>`;
+            html += `<div class="all-fields">`;
+            const sortedKeys = Object.keys(allFields).sort();
+            for (const key of sortedKeys) {
+                html += `<div><strong>${key}:</strong> ${allFields[key]}</div>`;
+            }
+            html += `</div>`;
+
+            html += `</div>`;
+            resultsDiv.innerHTML += html;
+        }
+
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+    </script>
+</body>
+</html>

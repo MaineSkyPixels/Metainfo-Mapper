@@ -948,13 +948,29 @@
             // Extract RTK data if enabled
             if (this.rtkOptions.enabled) {
                 imageData.rtk = {
+                    // DJI RTK fields
                     status: exifData.RTKStatus || exifData.rtk_flag || null,
                     processingMethod: exifData.GPSProcessingMethod || null,
-                    horizontalAccuracy: exifData.GpsHorizontalAccuracy || null,
-                    verticalAccuracy: exifData.GpsVerticalAccuracy || null,
+                    horizontalAccuracy: exifData.GpsHorizontalAccuracy || exifData.rtk_std_lat || null,
+                    verticalAccuracy: exifData.GpsVerticalAccuracy || exifData.rtk_std_hgt || null,
                     dop: exifData.GPSDOP || null,
                     differential: exifData.GPSDifferential || null,
-                    correctionAge: exifData.RTKMeanCorrAge || exifData.rtk_diff_age || null
+                    correctionAge: exifData.RTKMeanCorrAge || exifData.rtk_diff_age || null,
+                    
+                    // Additional DJI-specific RTK fields
+                    rtkStdLon: exifData.rtk_std_lon || null,
+                    rtkStdLat: exifData.rtk_std_lat || null,
+                    rtkStdHgt: exifData.rtk_std_hgt || null,
+                    
+                    // XMP RTK fields (if accessible)
+                    gpsAntennaOffsetNorth: exifData.GPSAntennaOffsetNorth || null,
+                    gpsAntennaOffsetEast: exifData.GPSAntennaOffsetEast || null,
+                    gpsAntennaOffsetUp: exifData.GPSAntennaOffsetUp || null,
+                    
+                    // Standard deviations
+                    gpsStdPosNorth: exifData.GPSStdPosNorth || null,
+                    gpsStdPosEast: exifData.GPSStdPosEast || null,
+                    gpsStdPosUp: exifData.GPSStdPosUp || null
                 };
             }
 
@@ -1054,14 +1070,46 @@
                 // Determine marker color based on RTK status
                 let markerColor = '#00ff00'; // Default green for no RTK data
                 
-                if (this.rtkOptions.enabled && image.rtk && image.rtk.status !== null) {
-                    const status = image.rtk.status;
-                    if (status === 50) markerColor = '#00ff00'; // RTK Fixed - Green
-                    else if (status === 34) markerColor = '#00ff00'; // RTK Float - Green
-                    else if (status === 16) markerColor = '#ff0000'; // RTK Single - Red
-                    else markerColor = '#ff0000'; // Other/No RTK - Red
-                } else if (this.rtkOptions.enabled) {
-                    markerColor = '#ff0000'; // No RTK data when RTK is enabled - Red
+                if (this.rtkOptions.enabled && image.rtk) {
+                    let hasRtkData = false;
+                    let rtkQuality = 'none';
+                    
+                    // Check for RTK status
+                    if (image.rtk.status !== null) {
+                        const status = image.rtk.status;
+                        if (status === 50) {
+                            markerColor = '#00ff00'; // RTK Fixed - Green
+                            rtkQuality = 'fixed';
+                            hasRtkData = true;
+                        } else if (status === 34) {
+                            markerColor = '#00ff00'; // RTK Float - Green
+                            rtkQuality = 'float';
+                            hasRtkData = true;
+                        } else if (status === 16) {
+                            markerColor = '#ff0000'; // RTK Single - Red
+                            rtkQuality = 'single';
+                            hasRtkData = true;
+                        }
+                    }
+                    
+                    // Check for RTK standard deviations (indicates RTK data)
+                    if (!hasRtkData && (image.rtk.rtkStdLon !== null || image.rtk.rtkStdLat !== null || image.rtk.rtkStdHgt !== null)) {
+                        markerColor = '#00ff00'; // Assume good quality if we have std dev data
+                        rtkQuality = 'std_dev';
+                        hasRtkData = true;
+                    }
+                    
+                    // Check for GPS differential (indicates RTK correction)
+                    if (!hasRtkData && image.rtk.differential !== null && image.rtk.differential !== 0) {
+                        markerColor = '#00ff00'; // Assume good quality if differential correction was applied
+                        rtkQuality = 'differential';
+                        hasRtkData = true;
+                    }
+                    
+                    // If RTK is enabled but no RTK data found, mark as red
+                    if (!hasRtkData) {
+                        markerColor = '#ff0000'; // No RTK data when RTK is enabled - Red
+                    }
                 }
 
                 const marker = L.circleMarker([image.latitude, image.longitude], {
@@ -1099,6 +1147,21 @@
                         }
                         if (image.rtk.dop !== null) {
                             coords.push(`DOP: ${image.rtk.dop}`);
+                        }
+                        if (image.rtk.differential !== null) {
+                            coords.push(`Differential: ${image.rtk.differential}`);
+                        }
+                        if (image.rtk.rtkStdLon !== null) {
+                            coords.push(`RTK Std Lon: ${image.rtk.rtkStdLon}m`);
+                        }
+                        if (image.rtk.rtkStdLat !== null) {
+                            coords.push(`RTK Std Lat: ${image.rtk.rtkStdLat}m`);
+                        }
+                        if (image.rtk.rtkStdHgt !== null) {
+                            coords.push(`RTK Std Hgt: ${image.rtk.rtkStdHgt}m`);
+                        }
+                        if (image.rtk.correctionAge !== null) {
+                            coords.push(`Correction Age: ${image.rtk.correctionAge}ms`);
                         }
                     }
 
@@ -1185,18 +1248,43 @@
             let correctionAgeCount = 0;
 
             this.imageData.forEach(image => {
-                if (image.rtk && image.rtk.status !== null) {
-                    const status = image.rtk.status;
-                    if (status === 50) fixed++;
-                    else if (status === 34) float++;
-                    else if (status === 16) single++;
-                    else noRtk++;
+                let hasRtkData = false;
+                
+                if (image.rtk) {
+                    // Check for RTK status
+                    if (image.rtk.status !== null) {
+                        const status = image.rtk.status;
+                        if (status === 50) fixed++;
+                        else if (status === 34) float++;
+                        else if (status === 16) single++;
+                        else noRtk++;
+                        hasRtkData = true;
+                    }
+                    
+                    // Check for RTK standard deviations (indicates RTK data even without status)
+                    if (image.rtk.rtkStdLon !== null || image.rtk.rtkStdLat !== null || image.rtk.rtkStdHgt !== null) {
+                        if (!hasRtkData) {
+                            // If we have RTK std dev data but no status, count as RTK data
+                            fixed++; // Assume fixed if we have std dev data
+                            hasRtkData = true;
+                        }
+                    }
+                    
+                    // Check for GPS differential (indicates RTK correction)
+                    if (image.rtk.differential !== null && image.rtk.differential !== 0) {
+                        if (!hasRtkData) {
+                            fixed++; // Assume fixed if differential correction was applied
+                            hasRtkData = true;
+                        }
+                    }
 
                     if (image.rtk.correctionAge !== null) {
                         correctionAgeSum += image.rtk.correctionAge;
                         correctionAgeCount++;
                     }
-                } else {
+                }
+                
+                if (!hasRtkData) {
                     noRtk++;
                 }
             });

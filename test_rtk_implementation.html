@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RTK Implementation Test</title>
+    <script src="https://unpkg.com/exifr@7.1.3/dist/lite.umd.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { border: 1px solid #ccc; margin: 20px 0; padding: 15px; }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+        .rtk-data { background: #f0f8ff; padding: 10px; margin: 10px 0; }
+        .image-result { border: 1px solid #ddd; margin: 10px 0; padding: 10px; }
+        button { padding: 10px 20px; margin: 5px; }
+        input[type="checkbox"] { margin-right: 10px; }
+    </style>
+</head>
+<body>
+    <h1>RTK Implementation Test</h1>
+    <p>This test verifies that our RTK implementation can correctly read RTK data from the sample images.</p>
+    
+    <div class="test-section">
+        <h2>Test Configuration</h2>
+        <label>
+            <input type="checkbox" id="rtk-enabled" checked>
+            Enable RTK Analysis
+        </label>
+        <br><br>
+        <input type="file" id="file-input" multiple accept=".jpg,.jpeg,.tif,.tiff,.png,.dng,.raw,.cr2,.nef,.arw,.orf,.rw2,.pef,.srw">
+        <button onclick="processImages()">Process Selected Images</button>
+        <button onclick="clearResults()">Clear Results</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Results</h2>
+        <div id="results"></div>
+        <div id="statistics"></div>
+    </div>
+
+    <script>
+        let imageData = [];
+        let errorData = [];
+
+        // Simulate our RTK implementation
+        class RTKTester {
+            constructor() {
+                this.rtkOptions = {
+                    enabled: true
+                };
+            }
+
+            async extractExifFromFile(file) {
+                const arrayBuffer = await file.arrayBuffer();
+                const exifData = await exifr.parse(arrayBuffer, { gps: true });
+
+                if (!exifData || typeof exifData.latitude !== 'number' || typeof exifData.longitude !== 'number') {
+                    return {
+                        success: false,
+                        reason: 'No GPS data found',
+                        details: 'Image does not contain GPS metadata'
+                    };
+                }
+
+                if (Math.abs(exifData.latitude) > 90 || Math.abs(exifData.longitude) > 180) {
+                    return {
+                        success: false,
+                        reason: 'Invalid GPS coordinates',
+                        details: `Lat: ${exifData.latitude}, Lon: ${exifData.longitude}`
+                    };
+                }
+
+                const imageData = {
+                    filename: file.name,
+                    latitude: exifData.latitude,
+                    longitude: exifData.longitude,
+                    altitude: exifData.GPSAltitude || exifData.altitude || null,
+                    timestamp: exifData.DateTimeOriginal || exifData.CreateDate || null,
+                    make: exifData.Make || null,
+                    model: exifData.Model || null
+                };
+
+                // Extract RTK data if enabled
+                if (this.rtkOptions.enabled) {
+                    imageData.rtk = {
+                        status: exifData.RTKStatus || exifData.rtk_flag || null,
+                        processingMethod: exifData.GPSProcessingMethod || null,
+                        horizontalAccuracy: exifData.GpsHorizontalAccuracy || null,
+                        verticalAccuracy: exifData.GpsVerticalAccuracy || null,
+                        dop: exifData.GPSDOP || null,
+                        differential: exifData.GPSDifferential || null,
+                        correctionAge: exifData.RTKMeanCorrAge || exifData.rtk_diff_age || null
+                    };
+                }
+
+                return {
+                    success: true,
+                    data: imageData
+                };
+            }
+
+            getRTKStatusText(status) {
+                switch (status) {
+                    case 50: return 'RTK Fixed';
+                    case 34: return 'RTK Float';
+                    case 16: return 'RTK Single';
+                    case 0: return 'No Positioning';
+                    default: return `Unknown (${status})`;
+                }
+            }
+
+            calculateRTKStats() {
+                let fixed = 0, float = 0, single = 0, noRtk = 0;
+                let correctionAgeSum = 0;
+                let correctionAgeCount = 0;
+
+                imageData.forEach(image => {
+                    if (image.rtk && image.rtk.status !== null) {
+                        const status = image.rtk.status;
+                        if (status === 50) fixed++;
+                        else if (status === 34) float++;
+                        else if (status === 16) single++;
+                        else noRtk++;
+
+                        if (image.rtk.correctionAge !== null) {
+                            correctionAgeSum += image.rtk.correctionAge;
+                            correctionAgeCount++;
+                        }
+                    } else {
+                        noRtk++;
+                    }
+                });
+
+                const avgCorrectionAge = correctionAgeCount > 0 
+                    ? (correctionAgeSum / correctionAgeCount).toFixed(2) + ' ms'
+                    : 'N/A';
+
+                return { fixed, float, single, noRtk, avgCorrectionAge };
+            }
+        }
+
+        const rtkTester = new RTKTester();
+
+        async function processImages() {
+            const files = document.getElementById('file-input').files;
+            const rtkEnabled = document.getElementById('rtk-enabled').checked;
+            
+            rtkTester.rtkOptions.enabled = rtkEnabled;
+            
+            if (files.length === 0) {
+                alert('Please select some images to process');
+                return;
+            }
+
+            imageData = [];
+            errorData = [];
+            
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<h3>Processing images...</h3>';
+
+            for (const file of files) {
+                try {
+                    const result = await rtkTester.extractExifFromFile(file);
+                    if (result.success) {
+                        imageData.push(result.data);
+                        displayImageResult(result.data);
+                    } else {
+                        errorData.push({
+                            filename: file.name,
+                            error: result.reason,
+                            details: result.details
+                        });
+                        displayErrorResult(file.name, result.reason, result.details);
+                    }
+                } catch (error) {
+                    errorData.push({
+                        filename: file.name,
+                        error: 'Failed to read EXIF data',
+                        details: error.message
+                    });
+                    displayErrorResult(file.name, 'Failed to read EXIF data', error.message);
+                }
+            }
+
+            updateStatistics();
+        }
+
+        function displayImageResult(image) {
+            const resultsDiv = document.getElementById('results');
+            const rtkEnabled = document.getElementById('rtk-enabled').checked;
+            
+            let html = `
+                <div class="image-result">
+                    <h4>${image.filename}</h4>
+                    <p><strong>GPS:</strong> ${image.latitude.toFixed(6)}, ${image.longitude.toFixed(6)}</p>
+                    <p><strong>Altitude:</strong> ${image.altitude || 'N/A'}</p>
+                    <p><strong>Camera:</strong> ${image.make || 'N/A'} ${image.model || 'N/A'}</p>
+            `;
+
+            if (rtkEnabled && image.rtk) {
+                html += `
+                    <div class="rtk-data">
+                        <h5>RTK Data:</h5>
+                        <p><strong>Status:</strong> ${image.rtk.status !== null ? rtkTester.getRTKStatusText(image.rtk.status) : 'N/A'}</p>
+                        <p><strong>Processing Method:</strong> ${image.rtk.processingMethod || 'N/A'}</p>
+                        <p><strong>Horizontal Accuracy:</strong> ${image.rtk.horizontalAccuracy !== null ? image.rtk.horizontalAccuracy + 'm' : 'N/A'}</p>
+                        <p><strong>Vertical Accuracy:</strong> ${image.rtk.verticalAccuracy !== null ? image.rtk.verticalAccuracy + 'm' : 'N/A'}</p>
+                        <p><strong>DOP:</strong> ${image.rtk.dop || 'N/A'}</p>
+                        <p><strong>Differential:</strong> ${image.rtk.differential || 'N/A'}</p>
+                        <p><strong>Correction Age:</strong> ${image.rtk.correctionAge !== null ? image.rtk.correctionAge + 'ms' : 'N/A'}</p>
+                    </div>
+                `;
+            } else if (rtkEnabled) {
+                html += `<p class="error">No RTK data found</p>`;
+            }
+
+            html += `</div>`;
+            resultsDiv.innerHTML += html;
+        }
+
+        function displayErrorResult(filename, error, details) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML += `
+                <div class="image-result">
+                    <h4 class="error">${filename}</h4>
+                    <p class="error"><strong>Error:</strong> ${error}</p>
+                    <p class="error"><strong>Details:</strong> ${details}</p>
+                </div>
+            `;
+        }
+
+        function updateStatistics() {
+            const statsDiv = document.getElementById('statistics');
+            const rtkStats = rtkTester.calculateRTKStats();
+            
+            let html = `
+                <h3>Statistics</h3>
+                <p><strong>Total Images:</strong> ${imageData.length + errorData.length}</p>
+                <p><strong>Valid GPS:</strong> ${imageData.length}</p>
+                <p><strong>Errors:</strong> ${errorData.length}</p>
+            `;
+
+            if (document.getElementById('rtk-enabled').checked) {
+                html += `
+                    <h4>RTK Statistics</h4>
+                    <p><strong>RTK Fixed:</strong> ${rtkStats.fixed}</p>
+                    <p><strong>RTK Float:</strong> ${rtkStats.float}</p>
+                    <p><strong>RTK Single:</strong> ${rtkStats.single}</p>
+                    <p><strong>No RTK Data:</strong> ${rtkStats.noRtk}</p>
+                    <p><strong>Avg Correction Age:</strong> ${rtkStats.avgCorrectionAge}</p>
+                `;
+            }
+
+            statsDiv.innerHTML = html;
+        }
+
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+            document.getElementById('statistics').innerHTML = '';
+            imageData = [];
+            errorData = [];
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RTK EXIF Test</title>
+    <script src="https://unpkg.com/exifr@7.1.3/dist/lite.umd.js"></script>
+</head>
+<body>
+    <h1>RTK EXIF Data Test</h1>
+    <input type="file" id="file-input" multiple accept=".jpg,.jpeg,.tif,.tiff,.png,.dng,.raw,.cr2,.nef,.arw,.orf,.rw2,.pef,.srw">
+    <div id="results"></div>
+
+    <script>
+        document.getElementById('file-input').addEventListener('change', async (e) => {
+            const results = document.getElementById('results');
+            results.innerHTML = '<h2>Processing images...</h2>';
+            
+            for (const file of e.target.files) {
+                try {
+                    const arrayBuffer = await file.arrayBuffer();
+                    const exifData = await exifr.parse(arrayBuffer, { gps: true });
+                    
+                    results.innerHTML += `
+                        <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                            <h3>${file.name}</h3>
+                            <h4>Basic GPS Data:</h4>
+                            <p>Latitude: ${exifData?.latitude || 'N/A'}</p>
+                            <p>Longitude: ${exifData?.longitude || 'N/A'}</p>
+                            <p>Altitude: ${exifData?.GPSAltitude || exifData?.altitude || 'N/A'}</p>
+                            
+                            <h4>RTK Fields:</h4>
+                            <p>RTKStatus: ${exifData?.RTKStatus || 'N/A'}</p>
+                            <p>rtk_flag: ${exifData?.rtk_flag || 'N/A'}</p>
+                            <p>GPSProcessingMethod: ${exifData?.GPSProcessingMethod || 'N/A'}</p>
+                            <p>GpsHorizontalAccuracy: ${exifData?.GpsHorizontalAccuracy || 'N/A'}</p>
+                            <p>GpsVerticalAccuracy: ${exifData?.GpsVerticalAccuracy || 'N/A'}</p>
+                            <p>GPSDOP: ${exifData?.GPSDOP || 'N/A'}</p>
+                            <p>GPSDifferential: ${exifData?.GPSDifferential || 'N/A'}</p>
+                            <p>RTKMeanCorrAge: ${exifData?.RTKMeanCorrAge || 'N/A'}</p>
+                            <p>rtk_diff_age: ${exifData?.rtk_diff_age || 'N/A'}</p>
+                            
+                            <h4>All EXIF Keys (filtered for RTK/GPS related):</h4>
+                            <ul>
+                                ${Object.keys(exifData || {}).filter(key => 
+                                    key.toLowerCase().includes('rtk') || 
+                                    key.toLowerCase().includes('gps') ||
+                                    key.toLowerCase().includes('accuracy') ||
+                                    key.toLowerCase().includes('dop') ||
+                                    key.toLowerCase().includes('differential')
+                                ).map(key => `<li>${key}: ${exifData[key]}</li>`).join('')}
+                            </ul>
+                        </div>
+                    `;
+                } catch (error) {
+                    results.innerHTML += `
+                        <div style="border: 1px solid red; margin: 10px; padding: 10px;">
+                            <h3>${file.name}</h3>
+                            <p style="color: red;">Error: ${error.message}</p>
+                        </div>
+                    `;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

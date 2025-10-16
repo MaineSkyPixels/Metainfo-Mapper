@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RTK App Test - Metainfo Mapper</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-instructions { background: #f0f8ff; padding: 15px; border-radius: 5px; margin: 20px 0; }
+        .test-steps { background: #f9f9f9; padding: 15px; border-radius: 5px; margin: 20px 0; }
+        .iframe-container { border: 2px solid #ccc; border-radius: 5px; margin: 20px 0; }
+        iframe { width: 100%; height: 800px; border: none; }
+        .status { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; }
+        .warning { background: #fff3cd; color: #856404; }
+        .error { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <h1>RTK Implementation Test - Metainfo Mapper</h1>
+    
+    <div class="test-instructions">
+        <h2>Test Instructions</h2>
+        <p>This test verifies that our RTK implementation works correctly with the actual Metainfo Mapper application.</p>
+        <p><strong>Test Images Location:</strong> <code>test images/rtk/samples/</code></p>
+    </div>
+
+    <div class="test-steps">
+        <h3>Testing Steps:</h3>
+        <ol>
+            <li>Start a new session in the app below</li>
+            <li><strong>Enable the RTK Analysis checkbox</strong> (this is crucial!)</li>
+            <li>Load images from the <code>test images/rtk/samples/</code> folder</li>
+            <li>Verify that RTK statistics appear in the statistics panel</li>
+            <li>Check that markers are color-coded (RED for no RTK/RTK Single, GREEN for RTK Fixed/Float)</li>
+            <li>Click on markers to see RTK data in popups</li>
+            <li>Generate KML and verify RTK data is included</li>
+            <li>Download RTK report and verify it contains RTK analysis</li>
+        </ol>
+    </div>
+
+    <div class="status success">
+        <strong>Expected Results:</strong>
+        <ul>
+            <li>RTK statistics should show counts for Fixed, Float, and Single</li>
+            <li>Average Correction Age should be calculated</li>
+            <li>Markers should be color-coded based on RTK status</li>
+            <li>KML export should include RTK data in placemark descriptions</li>
+            <li>RTK report should contain detailed analysis of all images</li>
+        </ul>
+    </div>
+
+    <div class="iframe-container">
+        <iframe src="index.html" title="Metainfo Mapper RTK Test"></iframe>
+    </div>
+
+    <div class="test-steps">
+        <h3>RTK Field Verification:</h3>
+        <p>The following RTK fields should be extracted and displayed when available:</p>
+        <ul>
+            <li><strong>RTK Status</strong> - 50 (Fixed), 34 (Float), 16 (Single), 0 (No Positioning)</li>
+            <li><strong>Processing Method</strong> - GPS processing method used</li>
+            <li><strong>Horizontal Accuracy</strong> - Standard deviation in meters</li>
+            <li><strong>Vertical Accuracy</strong> - Standard deviation in meters</li>
+            <li><strong>DOP</strong> - Dilution of Precision</li>
+            <li><strong>Differential</strong> - Whether differential correction was applied</li>
+            <li><strong>Correction Age</strong> - Age of RTK correction data in milliseconds</li>
+        </ul>
+    </div>
+
+    <div class="status warning">
+        <strong>Note:</strong> If RTK data is not being detected, it may be because:
+        <ul>
+            <li>The RTK checkbox is not enabled</li>
+            <li>The images don't contain RTK metadata in the expected format</li>
+            <li>The exifr library is not reading the specific RTK fields</li>
+        </ul>
+    </div>
+
+    <div class="test-steps">
+        <h3>Debug Information:</h3>
+        <p>If RTK data is not being detected, check the browser console (F12) for any errors or warnings.</p>
+        <p>You can also use the <code>rtk_exif_test.html</code> file to examine the raw EXIF data from the sample images.</p>
+    </div>
+</body>
+</html>
