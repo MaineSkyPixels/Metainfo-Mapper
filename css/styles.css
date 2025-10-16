@@ -878,8 +878,8 @@ body:not(.light-theme) #stats-content span {
 }
 
 body.dark-theme .rtk-section {
-    background: rgba(15, 23, 42, 0.8);
-    border-color: #334155;
+    background: rgba(15, 23, 42, 0.8) !important;
+    border-color: #334155 !important;
 }
 
 body.light-theme .rtk-section {
@@ -944,7 +944,7 @@ body.light-theme .checkbox-label {
 }
 
 body.dark-theme .checkbox-label {
-    color: #f8fafc;
+    color: #f8fafc !important;
 }
 
 .rtk-section .hint {
@@ -959,5 +959,5 @@ body.light-theme .rtk-section .hint {
 }
 
 body.dark-theme .rtk-section .hint {
-    color: #cbd5e1;
+    color: #cbd5e1 !important;
 }
