@@ -1,5 +1,52 @@
 # Changelog
 
+## 1.7.0 - 2025-10-16
+- **RTK Analysis Feature**: Added comprehensive Real-Time Kinematic GPS analysis capabilities as an optional feature.
+  - **Optional RTK Processing**: Added checkbox in session setup to enable RTK analysis (disabled by default to avoid processing overhead).
+  - **RTK Statistics**: Added new statistics tracking for RTK Fixed, RTK Float, and RTK Single image counts.
+  - **Visual Indicators**: RTK images are color-coded on the map (Green for RTK Fixed, Red for RTK Single/No RTK).
+  - **Enhanced EXIF Parsing**: Upgraded to full exifr build for comprehensive metadata extraction including DJI RTK fields.
+  - **KML Integration**: All 7 RTK data fields are embedded in KML exports for each image.
+  - **HTML Reporting**: Added RTK analysis report generation with detailed field breakdowns.
+  - **RTK Mean Correction Age**: Calculates and displays average correction age across the dataset.
+  - **Field Support**: Extracts RtkFlag, RtkStdLon, RtkStdLat, RtkStdHgt, RtkDiffAge, GPSProcessingMethod, and accuracy data.
+
+- **Major CSS Cleanup and Reorganization**: Complete refactor of stylesheet for better maintainability and performance.
+  - **File Size Reduction**: Reduced from 963 lines to 763 lines (21% reduction) by eliminating duplicate rules.
+  - **Logical Organization**: Reorganized into 21 clear sections with descriptive headers.
+  - **Eliminated Duplications**: Removed 3 duplicate definitions of body, #sidebar, and #sidebar h1 rules.
+  - **Consolidated Themes**: Unified dark/light theme handling with consistent CSS variables.
+  - **Fixed Conflicts**: Resolved all conflicting and overridden CSS rules.
+  - **Improved Performance**: Faster parsing and better maintainability for future development.
+
+- **RTK UI/UX Improvements**: Enhanced RTK Analysis section styling for both themes.
+  - **Dark Theme**: Dark blue background with bright white text for excellent contrast.
+  - **Light Theme**: Clean white background with dark gray text for optimal readability.
+  - **Accessibility**: High contrast ratios meeting readability standards.
+  - **Theme Consistency**: RTK section now properly adapts to theme changes.
+
+- **Testing Infrastructure**: Created comprehensive testing tools for RTK development.
+  - **Debug Tools**: Multiple HTML files for testing RTK field extraction and EXIF parsing.
+  - **Field Analysis**: Tools to identify and verify DJI RTK field names and data structures.
+  - **XMP Parsing**: Dedicated tests for XMP metadata extraction capabilities.
+  - **Organized Testing**: Moved all testing files to `testing-e/` folder (gitignored for local development).
+
+- **Build System Updates**: Enhanced version tracking and cache management.
+  - **Build Number**: Updated to #101625b following date-based increment protocol.
+  - **Cache Busting**: Added version parameters to CSS links to force browser refresh.
+  - **Documentation**: Updated build numbering protocol in README.md for future AI developers.
+
+- **Repository Management**: Improved organization and workflow.
+  - **Branch Creation**: Created `experimental` branch for feature development.
+  - **File Organization**: Added testing folders to .gitignore for clean repository.
+  - **Clean Commits**: Removed testing files from repository while preserving local development tools.
+
+- **Technical Improvements**:
+  - **EXIF Library**: Upgraded from exifr lite to full build for comprehensive metadata support.
+  - **Error Handling**: Enhanced RTK data detection with fallback mechanisms.
+  - **Performance**: Optimized CSS loading and parsing with organized structure.
+  - **Compatibility**: Ensured RTK feature works across different DJI drone models and firmware versions.
+
 ## 1.6.0 - 2025-01-XX
 - **Expanded Image Format Support**: Added support for TIFF (.tif, .tiff), PNG, and RAW formats (DNG, CR2, NEF, ARW, ORF, RW2, PEF, SRW) in addition to existing JPG support.
 - **Enhanced File Processing**: Updated file filtering logic to handle broader range of image formats with GPS metadata.
