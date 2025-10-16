@@ -921,3 +921,82 @@ body.light-theme #mapbox-token-status {
     pointer-events: none;
     font-size: 13px;
 }
+
+/* Help Icons and Tooltips */
+.help-icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #6b7280;
+    color: white;
+    text-align: center;
+    line-height: 16px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: help;
+    margin-left: 8px;
+    position: relative;
+    transition: background-color 0.2s ease;
+}
+
+.help-icon:hover {
+    background: #4b5563;
+}
+
+body.dark-theme .help-icon {
+    background: #9ca3af;
+    color: #1f2937;
+}
+
+body.dark-theme .help-icon:hover {
+    background: #d1d5db;
+}
+
+.help-icon::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(15, 23, 42, 0.95);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: normal;
+    white-space: nowrap;
+    max-width: 300px;
+    white-space: normal;
+    text-align: left;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+body.light-theme .help-icon::before {
+    background: rgba(255, 255, 255, 0.95);
+    color: #1f2937;
+    border: 1px solid #e5e7eb;
+}
+
+.help-icon:hover::before {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Adjust help icon positioning in checkbox */
+.checkbox-container .help-icon {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.checkbox-container {
+    position: relative;
+    padding-right: 30px;
+}
