@@ -882,6 +882,11 @@ body.dark-theme .rtk-section {
     border-color: #334155;
 }
 
+body.light-theme .rtk-section {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #e9ecef;
+}
+
 .checkbox-container {
     display: flex;
     align-items: center;
@@ -909,6 +914,10 @@ body.dark-theme .checkmark {
     border-color: #64748b;
 }
 
+body.light-theme .checkmark {
+    border-color: #94a3b8;
+}
+
 .checkbox-container input[type="checkbox"]:checked + .checkmark {
     background: #3b82f6;
     border-color: #3b82f6;
@@ -928,4 +937,15 @@ body.dark-theme .checkmark {
 .checkbox-label {
     font-weight: 500;
     color: var(--text-primary);
+}
+
+.rtk-section .hint {
+    color: var(--text-secondary);
+    font-size: 12px;
+    margin-top: 8px;
+    line-height: 1.4;
+}
+
+body.light-theme .rtk-section .hint {
+    color: #425466;
 }
