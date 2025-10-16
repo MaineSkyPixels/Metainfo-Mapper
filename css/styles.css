@@ -965,8 +965,8 @@ body.dark-theme .help-icon:hover {
     border-radius: 6px;
     font-size: 12px;
     font-weight: normal;
-    width: 800px;
-    max-width: 800px;
+    width: 400px;
+    max-width: 400px;
     white-space: normal;
     text-align: left;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
