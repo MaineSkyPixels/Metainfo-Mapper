@@ -61,7 +61,9 @@
             <h3>Key Features</h3>
             <ul>
                 <li><strong>Plot geotagged imagery and flight paths</strong> instantly in your browser</li>
+                <li><strong>RTK Analysis</strong> - Optional high-precision GPS analysis for RTK-capable drones with color-coded markers and detailed statistics</li>
                 <li><strong>Export clean KML files</strong> ready for Google Earth, Google My Maps, or GIS tools</li>
+                <li><strong>RTK Reports</strong> - Generate detailed HTML reports with RTK field breakdowns and analysis</li>
                 <li><strong>Spot GPS gaps quickly</strong> so you can troubleshoot metadata issues</li>
                 <li><strong>100% client-side processing</strong> - no data leaves your device</li>
                 <li><strong>Optional Mapbox integration</strong> for satellite imagery backgrounds</li>
@@ -120,6 +122,32 @@
                     <p>Creates standard KML files compatible with Google Earth, My Maps, and GIS applications</p>
                 </div>
             </div>
+        </div>
+
+        <div class="section">
+            <h2>RTK Analysis Feature</h2>
+            <p>Metainfo Mapper includes advanced Real-Time Kinematic (RTK) GPS analysis capabilities for high-precision drone operations:</p>
+            
+            <h3>RTK Capabilities</h3>
+            <ul>
+                <li><strong>Optional Processing:</strong> Enable RTK analysis via checkbox - disabled by default to avoid processing overhead</li>
+                <li><strong>Visual Indicators:</strong> Color-coded markers show RTK status (Green = RTK Fixed, Red = RTK Single/No RTK)</li>
+                <li><strong>Enhanced Statistics:</strong> Track RTK Fixed, Float, and Single counts plus mean correction age</li>
+                <li><strong>Data Extraction:</strong> Extracts 7 RTK data fields including RtkFlag, standard deviations, and differential age</li>
+                <li><strong>Export Integration:</strong> All RTK fields embedded in KML exports for comprehensive analysis</li>
+                <li><strong>HTML Reports:</strong> Generate detailed RTK analysis reports with field breakdowns</li>
+                <li><strong>Compatible Equipment:</strong> Works with DJI Phantom 4 RTK, Matrice 300 RTK, Mavic 2 Enterprise Advanced, and other RTK-capable drones</li>
+            </ul>
+            
+            <h3>RTK Data Fields</h3>
+            <p>The system extracts the following RTK metadata fields:</p>
+            <ul>
+                <li><strong>RtkFlag:</strong> RTK status indicator</li>
+                <li><strong>RtkStdLon/RtkStdLat/RtkStdHgt:</strong> Standard deviation measurements for longitude, latitude, and height</li>
+                <li><strong>RtkDiffAge:</strong> Differential age in milliseconds</li>
+                <li><strong>GPSProcessingMethod:</strong> Processing method used</li>
+                <li><strong>Accuracy measurements:</strong> Horizontal and vertical accuracy data</li>
+            </ul>
         </div>
 
         <div class="section">

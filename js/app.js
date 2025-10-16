@@ -588,8 +588,8 @@
 
             // UI controls
             document.getElementById('add-more-btn').addEventListener('click', () => {
-                document.getElementById('upload-section').style.display = 'block';
-                document.getElementById('controls').style.display = 'none';
+                // Upload section is always visible now, just scroll to it
+                document.getElementById('upload-section').scrollIntoView({ behavior: 'smooth' });
             });
 
             document.getElementById('done-btn').addEventListener('click', () => {
@@ -638,7 +638,8 @@
 
             this.clearSession();
             document.getElementById('session-section').style.display = 'block';
-            document.getElementById('upload-section').style.display = 'none';
+            // Keep upload section visible for multiple drag and drops
+            // document.getElementById('upload-section').style.display = 'none';
             document.getElementById('stats').style.display = 'none';
             document.getElementById('controls').style.display = 'none';
             document.getElementById('download-kml').style.display = 'none';
@@ -784,7 +785,8 @@
             this.toggleMyMapsGuidance(false);
             this.initThemeToggle();
             this.setProcessingState(true, imageFiles.length);
-            document.getElementById('upload-section').style.display = 'none';
+            // Keep upload section visible for multiple drag and drops
+            // document.getElementById('upload-section').style.display = 'none';
 
             let processedCount = 0;
 
@@ -817,7 +819,8 @@
             this.updateStats();
 
             document.getElementById('controls').style.display = 'block';
-            document.getElementById('upload-section').style.display = 'none';
+            // Keep upload section visible for multiple drag and drops
+            // document.getElementById('upload-section').style.display = 'none';
             document.getElementById('done-btn').style.display = this.imageData.length > 0 ? 'block' : 'none';
             document.getElementById('view-errors').style.display = this.errorData.length > 0 ? 'block' : 'none';
             this.setProcessingState(false);
