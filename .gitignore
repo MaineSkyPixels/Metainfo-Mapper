@@ -1,6 +1,9 @@
 # Press releases and marketing materials
 pressIN.txt
 
+# Test images and development files
+Test images/
+
 # Node.js dependencies
 node_modules/
 
