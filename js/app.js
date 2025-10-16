@@ -1689,27 +1689,27 @@ ${this.errorData.map(error => `
          * Position tooltip to stay within browser window bounds
          */
         positionTooltip(icon) {
-            const tooltip = icon.querySelector('::before');
             const rect = icon.getBoundingClientRect();
             const viewportWidth = window.innerWidth;
             const tooltipWidth = 400; // Match CSS width
-            const margin = 20; // Safety margin from viewport edge
+            const margin = 50; // Increased safety margin
             
             // Remove any existing positioning classes
             icon.classList.remove('tooltip-left', 'tooltip-right');
             
-            // Calculate if tooltip would overflow left edge
+            // Calculate if tooltip would overflow
             const leftOverflow = rect.left - (tooltipWidth / 2) < margin;
             const rightOverflow = rect.right + (tooltipWidth / 2) > viewportWidth - margin;
             
-            if (leftOverflow && !rightOverflow) {
-                // Position to the right if it would overflow left
+            // Only apply positioning if there's significant overflow
+            if (leftOverflow && !rightOverflow && rect.left < tooltipWidth) {
+                // Only position right if icon is very close to left edge
                 icon.classList.add('tooltip-right');
-            } else if (rightOverflow && !leftOverflow) {
-                // Position to the left if it would overflow right
+            } else if (rightOverflow && !leftOverflow && (viewportWidth - rect.right) < tooltipWidth) {
+                // Only position left if icon is very close to right edge
                 icon.classList.add('tooltip-left');
             }
-            // Default centered position if no overflow
+            // Default centered position if no significant overflow
         }
     }
 
