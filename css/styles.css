@@ -939,6 +939,14 @@ body.light-theme .checkmark {
     color: var(--text-primary);
 }
 
+body.light-theme .checkbox-label {
+    color: #1f2933;
+}
+
+body.dark-theme .checkbox-label {
+    color: #e2e8f0;
+}
+
 .rtk-section .hint {
     color: var(--text-secondary);
     font-size: 12px;
@@ -948,4 +956,8 @@ body.light-theme .checkmark {
 
 body.light-theme .rtk-section .hint {
     color: #425466;
+}
+
+body.dark-theme .rtk-section .hint {
+    color: #94a3b8;
 }
