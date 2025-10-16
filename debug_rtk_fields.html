@@ -40,8 +40,7 @@
                     const exifData = await exifr.parse(arrayBuffer, { 
                         gps: true,
                         xmp: true,
-                        iptc: true,
-                        icc: true
+                        iptc: true
                     });
                     
                     displayImageAnalysis(file.name, exifData);
@@ -79,7 +78,8 @@
                     key.toLowerCase().includes('accuracy') ||
                     key.toLowerCase().includes('differential') ||
                     key.toLowerCase().includes('correction') ||
-                    key.toLowerCase().includes('dop')) {
+                    key.toLowerCase().includes('dop') ||
+                    key.toLowerCase().includes('selfdata')) {
                     rtkFields[key] = value;
                 }
                 

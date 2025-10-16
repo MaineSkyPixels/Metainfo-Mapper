@@ -921,8 +921,7 @@
             const exifData = await exifr.parse(arrayBuffer, { 
                 gps: true,
                 xmp: true,
-                iptc: true,
-                icc: true
+                iptc: true
             });
 
             if (!exifData || typeof exifData.latitude !== 'number' || typeof exifData.longitude !== 'number') {
@@ -954,19 +953,19 @@
             // Extract RTK data if enabled
             if (this.rtkOptions.enabled) {
                 imageData.rtk = {
-                    // DJI XMP RTK fields (primary)
-                    status: exifData['Xmp.drone-dji.RtkFlag'] || exifData.RTKStatus || exifData.rtk_flag || null,
+                    // DJI XMP SelfData RTK fields (primary)
+                    status: exifData['Xmp.SelfData.RtkFlag'] || exifData.RTKStatus || exifData.rtk_flag || null,
                     processingMethod: exifData.GPSProcessingMethod || null,
-                    horizontalAccuracy: exifData.GpsHorizontalAccuracy || exifData['Xmp.drone-dji.RtkStdLat'] || exifData.rtk_std_lat || null,
-                    verticalAccuracy: exifData.GpsVerticalAccuracy || exifData['Xmp.drone-dji.RtkStdHgt'] || exifData.rtk_std_hgt || null,
+                    horizontalAccuracy: exifData.GpsHorizontalAccuracy || exifData['Xmp.SelfData.RtkStdLat'] || exifData.rtk_std_lat || null,
+                    verticalAccuracy: exifData.GpsVerticalAccuracy || exifData['Xmp.SelfData.RtkStdHgt'] || exifData.rtk_std_hgt || null,
                     dop: exifData.GPSDOP || null,
                     differential: exifData.GPSDifferential || null,
-                    correctionAge: exifData.RTKMeanCorrAge || exifData.rtk_diff_age || null,
+                    correctionAge: exifData['Xmp.SelfData.RtkDiffAge'] || exifData.RTKMeanCorrAge || exifData.rtk_diff_age || null,
                     
-                    // DJI XMP RTK standard deviations
-                    rtkStdLon: exifData['Xmp.drone-dji.RtkStdLon'] || exifData.rtk_std_lon || null,
-                    rtkStdLat: exifData['Xmp.drone-dji.RtkStdLat'] || exifData.rtk_std_lat || null,
-                    rtkStdHgt: exifData['Xmp.drone-dji.RtkStdHgt'] || exifData.rtk_std_hgt || null,
+                    // DJI XMP SelfData RTK standard deviations
+                    rtkStdLon: exifData['Xmp.SelfData.RtkStdLon'] || exifData.rtk_std_lon || null,
+                    rtkStdLat: exifData['Xmp.SelfData.RtkStdLat'] || exifData.rtk_std_lat || null,
+                    rtkStdHgt: exifData['Xmp.SelfData.RtkStdHgt'] || exifData.rtk_std_hgt || null,
                     
                     // XMP RTK fields (if accessible)
                     gpsAntennaOffsetNorth: exifData.GPSAntennaOffsetNorth || null,

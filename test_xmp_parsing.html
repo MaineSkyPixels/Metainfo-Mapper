@@ -40,8 +40,7 @@
                     const exifDataWithXMP = await exifr.parse(arrayBuffer, { 
                         gps: true,
                         xmp: true,
-                        iptc: true,
-                        icc: true
+                        iptc: true
                     });
                     
                     // Test without XMP for comparison
@@ -71,7 +70,7 @@
             for (const [key, value] of Object.entries(dataWithXMP || {})) {
                 if (key.startsWith('Xmp.')) {
                     xmpFields[key] = value;
-                    if (key.includes('drone-dji') || key.includes('DJI') || key.includes('rtk') || key.includes('Rtk')) {
+                    if (key.includes('SelfData') || key.includes('drone-dji') || key.includes('DJI') || key.includes('rtk') || key.includes('Rtk')) {
                         djiFields[key] = value;
                     }
                 }

@@ -36,11 +36,12 @@
 
             // Define the exact fields our implementation looks for
             const ourRtkFields = {
-                // DJI XMP RTK fields (primary)
-                'Xmp.drone-dji.RtkFlag': 'DJI RTK Flag (XMP)',
-                'Xmp.drone-dji.RtkStdLon': 'DJI RTK Longitude Std Dev (XMP)',
-                'Xmp.drone-dji.RtkStdLat': 'DJI RTK Latitude Std Dev (XMP)',
-                'Xmp.drone-dji.RtkStdHgt': 'DJI RTK Height Std Dev (XMP)',
+                // DJI XMP SelfData RTK fields (primary)
+                'Xmp.SelfData.RtkFlag': 'DJI RTK Flag (XMP SelfData)',
+                'Xmp.SelfData.RtkStdLon': 'DJI RTK Longitude Std Dev (XMP SelfData)',
+                'Xmp.SelfData.RtkStdLat': 'DJI RTK Latitude Std Dev (XMP SelfData)',
+                'Xmp.SelfData.RtkStdHgt': 'DJI RTK Height Std Dev (XMP SelfData)',
+                'Xmp.SelfData.RtkDiffAge': 'DJI RTK Diff Age (XMP SelfData)',
                 
                 // Standard RTK fields
                 'RTKStatus': 'RTK positioning status',
@@ -75,8 +76,7 @@
                     const exifData = await exifr.parse(arrayBuffer, { 
                         gps: true,
                         xmp: true,
-                        iptc: true,
-                        icc: true
+                        iptc: true
                     });
                     
                     displayFieldTest(file.name, exifData, ourRtkFields);
