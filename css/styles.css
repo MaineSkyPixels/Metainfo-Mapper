@@ -977,6 +977,18 @@ body.dark-theme .help-icon:hover {
     pointer-events: none;
 }
 
+/* Smart positioning for tooltips */
+.help-icon.tooltip-left::before {
+    left: 0;
+    transform: translateX(0);
+}
+
+.help-icon.tooltip-right::before {
+    left: auto;
+    right: 0;
+    transform: translateX(0);
+}
+
 body.light-theme .help-icon::before {
     background: rgba(255, 255, 255, 0.95);
     color: #1f2937;

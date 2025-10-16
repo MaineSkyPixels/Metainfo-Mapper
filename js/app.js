@@ -597,6 +597,9 @@
                 this.collapseHeroOverlay();
             });
 
+            // Smart tooltip positioning
+            this.setupSmartTooltips();
+
             document.getElementById('download-kml').addEventListener('click', () => this.downloadKML());
             document.getElementById('download-rtk-report').addEventListener('click', () => this.downloadRTKReport());
             document.getElementById('open-mymaps').addEventListener('click', () => this.openGoogleMyMaps());
@@ -1660,6 +1663,53 @@ ${this.errorData.map(error => `
                 .replace(/>/g, '&gt;')
                 .replace(/"/g, '&quot;')
                 .replace(/'/g, '&#39;');
+        }
+
+        /**
+         * Setup smart tooltip positioning to keep tooltips within browser window
+         */
+        setupSmartTooltips() {
+            const helpIcons = document.querySelectorAll('.help-icon');
+            
+            helpIcons.forEach(icon => {
+                icon.addEventListener('mouseenter', () => {
+                    this.positionTooltip(icon);
+                });
+                
+                // Update position on window resize
+                window.addEventListener('resize', () => {
+                    if (icon.matches(':hover')) {
+                        this.positionTooltip(icon);
+                    }
+                });
+            });
+        }
+
+        /**
+         * Position tooltip to stay within browser window bounds
+         */
+        positionTooltip(icon) {
+            const tooltip = icon.querySelector('::before');
+            const rect = icon.getBoundingClientRect();
+            const viewportWidth = window.innerWidth;
+            const tooltipWidth = 400; // Match CSS width
+            const margin = 20; // Safety margin from viewport edge
+            
+            // Remove any existing positioning classes
+            icon.classList.remove('tooltip-left', 'tooltip-right');
+            
+            // Calculate if tooltip would overflow left edge
+            const leftOverflow = rect.left - (tooltipWidth / 2) < margin;
+            const rightOverflow = rect.right + (tooltipWidth / 2) > viewportWidth - margin;
+            
+            if (leftOverflow && !rightOverflow) {
+                // Position to the right if it would overflow left
+                icon.classList.add('tooltip-right');
+            } else if (rightOverflow && !leftOverflow) {
+                // Position to the left if it would overflow right
+                icon.classList.add('tooltip-left');
+            }
+            // Default centered position if no overflow
         }
     }
 
