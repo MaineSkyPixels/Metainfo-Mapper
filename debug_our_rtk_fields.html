@@ -36,7 +36,13 @@
 
             // Define the exact fields our implementation looks for
             const ourRtkFields = {
-                // Primary RTK fields
+                // DJI XMP RTK fields (primary)
+                'Xmp.drone-dji.RtkFlag': 'DJI RTK Flag (XMP)',
+                'Xmp.drone-dji.RtkStdLon': 'DJI RTK Longitude Std Dev (XMP)',
+                'Xmp.drone-dji.RtkStdLat': 'DJI RTK Latitude Std Dev (XMP)',
+                'Xmp.drone-dji.RtkStdHgt': 'DJI RTK Height Std Dev (XMP)',
+                
+                // Standard RTK fields
                 'RTKStatus': 'RTK positioning status',
                 'rtk_flag': 'RTK flag (DJI)',
                 'GPSProcessingMethod': 'GPS processing method',
@@ -66,7 +72,12 @@
             for (const file of files) {
                 try {
                     const arrayBuffer = await file.arrayBuffer();
-                    const exifData = await exifr.parse(arrayBuffer, { gps: true });
+                    const exifData = await exifr.parse(arrayBuffer, { 
+                        gps: true,
+                        xmp: true,
+                        iptc: true,
+                        icc: true
+                    });
                     
                     displayFieldTest(file.name, exifData, ourRtkFields);
                 } catch (error) {
