@@ -47,6 +47,11 @@
                 storedPreference: null
             };
 
+            this.rtkOptions = {
+                checkbox: document.getElementById('rtk-enabled'),
+                enabled: false
+            };
+
             this.mapboxControls = {
                 container: document.getElementById('mapbox-config'),
                 input: document.getElementById('mapbox-token-input'),
@@ -576,6 +581,11 @@
                 e.target.value = '';
             });
 
+            // RTK options
+            this.rtkOptions.checkbox.addEventListener('change', (e) => {
+                this.rtkOptions.enabled = e.target.checked;
+            });
+
             // UI controls
             document.getElementById('add-more-btn').addEventListener('click', () => {
                 document.getElementById('upload-section').style.display = 'block';
@@ -588,6 +598,7 @@
             });
 
             document.getElementById('download-kml').addEventListener('click', () => this.downloadKML());
+            document.getElementById('download-rtk-report').addEventListener('click', () => this.downloadRTKReport());
             document.getElementById('open-mymaps').addEventListener('click', () => this.openGoogleMyMaps());
             document.getElementById('view-errors').addEventListener('click', () => this.showErrorReport());
 
@@ -924,17 +935,32 @@
                 };
             }
 
+            const imageData = {
+                filename: file.name,
+                latitude: exifData.latitude,
+                longitude: exifData.longitude,
+                altitude: exifData.GPSAltitude || exifData.altitude || null,
+                timestamp: exifData.DateTimeOriginal || exifData.CreateDate || null,
+                make: exifData.Make || null,
+                model: exifData.Model || null
+            };
+
+            // Extract RTK data if enabled
+            if (this.rtkOptions.enabled) {
+                imageData.rtk = {
+                    status: exifData.RTKStatus || exifData.rtk_flag || null,
+                    processingMethod: exifData.GPSProcessingMethod || null,
+                    horizontalAccuracy: exifData.GpsHorizontalAccuracy || null,
+                    verticalAccuracy: exifData.GpsVerticalAccuracy || null,
+                    dop: exifData.GPSDOP || null,
+                    differential: exifData.GPSDifferential || null,
+                    correctionAge: exifData.RTKMeanCorrAge || exifData.rtk_diff_age || null
+                };
+            }
+
             return {
                 success: true,
-                data: {
-                    filename: file.name,
-                    latitude: exifData.latitude,
-                    longitude: exifData.longitude,
-                    altitude: exifData.GPSAltitude || exifData.altitude || null,
-                    timestamp: exifData.DateTimeOriginal || exifData.CreateDate || null,
-                    make: exifData.Make || null,
-                    model: exifData.Model || null
-                }
+                data: imageData
             };
         }
 
@@ -1025,9 +1051,22 @@
             const pathCoords = [];
 
             this.imageData.forEach(image => {
+                // Determine marker color based on RTK status
+                let markerColor = '#00ff00'; // Default green for no RTK data
+                
+                if (this.rtkOptions.enabled && image.rtk && image.rtk.status !== null) {
+                    const status = image.rtk.status;
+                    if (status === 50) markerColor = '#00ff00'; // RTK Fixed - Green
+                    else if (status === 34) markerColor = '#00ff00'; // RTK Float - Green
+                    else if (status === 16) markerColor = '#ff0000'; // RTK Single - Red
+                    else markerColor = '#ff0000'; // Other/No RTK - Red
+                } else if (this.rtkOptions.enabled) {
+                    markerColor = '#ff0000'; // No RTK data when RTK is enabled - Red
+                }
+
                 const marker = L.circleMarker([image.latitude, image.longitude], {
                     radius: 6,
-                    fillColor: '#00ff00',
+                    fillColor: markerColor,
                     color: '#000',
                     weight: 1,
                     opacity: 1,
@@ -1043,6 +1082,24 @@
 
                     if (typeof image.altitude === 'number') {
                         coords.push(`Alt: ${image.altitude.toFixed(1)}m`);
+                    }
+
+                    // Add RTK information if available
+                    if (this.rtkOptions.enabled && image.rtk) {
+                        coords.push('--- RTK Data ---');
+                        if (image.rtk.status !== null) {
+                            const statusText = this.getRTKStatusText(image.rtk.status);
+                            coords.push(`RTK Status: ${statusText}`);
+                        }
+                        if (image.rtk.horizontalAccuracy !== null) {
+                            coords.push(`H. Accuracy: ${image.rtk.horizontalAccuracy}m`);
+                        }
+                        if (image.rtk.verticalAccuracy !== null) {
+                            coords.push(`V. Accuracy: ${image.rtk.verticalAccuracy}m`);
+                        }
+                        if (image.rtk.dop !== null) {
+                            coords.push(`DOP: ${image.rtk.dop}`);
+                        }
                     }
 
                     document.getElementById('coord-text').innerHTML = coords.join('<br>');
@@ -1084,6 +1141,84 @@
             document.getElementById('image-count').textContent = this.imageData.length + this.errorData.length;
             document.getElementById('valid-count').textContent = this.imageData.length;
             document.getElementById('error-count').textContent = this.errorData.length;
+
+            // Update RTK statistics if enabled
+            if (this.rtkOptions.enabled) {
+                this.updateRTKStats();
+            }
+        }
+
+        /**
+         * Update RTK statistics
+         */
+        updateRTKStats() {
+            const rtkStats = this.calculateRTKStats();
+            
+            // Update or create RTK statistics elements
+            let rtkStatsContainer = document.getElementById('rtk-stats');
+            if (!rtkStatsContainer) {
+                rtkStatsContainer = document.createElement('div');
+                rtkStatsContainer.id = 'rtk-stats';
+                rtkStatsContainer.innerHTML = `
+                    <hr style="margin: 15px 0;">
+                    <h4>RTK Analysis</h4>
+                    <p>RTK Fixed: <span id="rtk-fixed-count">0</span></p>
+                    <p>RTK Float: <span id="rtk-float-count">0</span></p>
+                    <p>RTK Single: <span id="rtk-single-count">0</span></p>
+                    <p>Avg Correction Age: <span id="rtk-avg-correction-age">N/A</span></p>
+                `;
+                document.getElementById('stats-content').appendChild(rtkStatsContainer);
+            }
+
+            document.getElementById('rtk-fixed-count').textContent = rtkStats.fixed;
+            document.getElementById('rtk-float-count').textContent = rtkStats.float;
+            document.getElementById('rtk-single-count').textContent = rtkStats.single;
+            document.getElementById('rtk-avg-correction-age').textContent = rtkStats.avgCorrectionAge;
+        }
+
+        /**
+         * Calculate RTK statistics
+         */
+        calculateRTKStats() {
+            let fixed = 0, float = 0, single = 0, noRtk = 0;
+            let correctionAgeSum = 0;
+            let correctionAgeCount = 0;
+
+            this.imageData.forEach(image => {
+                if (image.rtk && image.rtk.status !== null) {
+                    const status = image.rtk.status;
+                    if (status === 50) fixed++;
+                    else if (status === 34) float++;
+                    else if (status === 16) single++;
+                    else noRtk++;
+
+                    if (image.rtk.correctionAge !== null) {
+                        correctionAgeSum += image.rtk.correctionAge;
+                        correctionAgeCount++;
+                    }
+                } else {
+                    noRtk++;
+                }
+            });
+
+            const avgCorrectionAge = correctionAgeCount > 0 
+                ? (correctionAgeSum / correctionAgeCount).toFixed(2) + ' ms'
+                : 'N/A';
+
+            return { fixed, float, single, noRtk, avgCorrectionAge };
+        }
+
+        /**
+         * Get RTK status text from status code
+         */
+        getRTKStatusText(status) {
+            switch (status) {
+                case 50: return 'RTK Fixed';
+                case 34: return 'RTK Float';
+                case 16: return 'RTK Single';
+                case 0: return 'No Positioning';
+                default: return `Unknown (${status})`;
+            }
         }
 
         /**
@@ -1099,6 +1234,12 @@
                 this.kmlData = this.buildKmlDocument(this.sessionName, this.imageData);
                 document.getElementById('done-btn').style.display = 'none';
                 document.getElementById('download-kml').style.display = 'block';
+                
+                // Show RTK report button if RTK is enabled
+                if (this.rtkOptions.enabled) {
+                    document.getElementById('download-rtk-report').style.display = 'block';
+                }
+                
                 this.toggleMyMapsGuidance(true);
             } catch (error) {
                 console.error('Error generating KML:', error);
@@ -1130,6 +1271,32 @@
 
                 if (typeof image.altitude === 'number') {
                     details.push(`Alt: ${image.altitude.toFixed(1)}m`);
+                }
+
+                // Add RTK data if available
+                if (this.rtkOptions.enabled && image.rtk) {
+                    details.push('--- RTK Data ---');
+                    if (image.rtk.status !== null) {
+                        details.push(`RTK Status: ${this.getRTKStatusText(image.rtk.status)}`);
+                    }
+                    if (image.rtk.processingMethod !== null) {
+                        details.push(`Processing Method: ${escapeXml(image.rtk.processingMethod)}`);
+                    }
+                    if (image.rtk.horizontalAccuracy !== null) {
+                        details.push(`Horizontal Accuracy: ${image.rtk.horizontalAccuracy}m`);
+                    }
+                    if (image.rtk.verticalAccuracy !== null) {
+                        details.push(`Vertical Accuracy: ${image.rtk.verticalAccuracy}m`);
+                    }
+                    if (image.rtk.dop !== null) {
+                        details.push(`DOP: ${image.rtk.dop}`);
+                    }
+                    if (image.rtk.differential !== null) {
+                        details.push(`Differential: ${image.rtk.differential}`);
+                    }
+                    if (image.rtk.correctionAge !== null) {
+                        details.push(`Correction Age: ${image.rtk.correctionAge}ms`);
+                    }
                 }
 
                 let timestampElement = '';
@@ -1190,6 +1357,107 @@ ${placemarks}
             link.download = `${(this.sessionName || 'session').replace(/[^a-z0-9]/gi, '_')}.kml`;
             link.click();
             URL.revokeObjectURL(url);
+        }
+
+        /**
+         * Download RTK Report
+         */
+        downloadRTKReport() {
+            if (!this.rtkOptions.enabled || this.imageData.length === 0) {
+                alert('No RTK data to export');
+                return;
+            }
+
+            const reportHTML = this.generateRTKReport();
+            const blob = new Blob([reportHTML], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${(this.sessionName || 'session').replace(/[^a-z0-9]/gi, '_')}_rtk_report.html`;
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        /**
+         * Generate RTK Report HTML
+         */
+        generateRTKReport() {
+            const rtkStats = this.calculateRTKStats();
+            const sessionName = this.sessionName || 'Session';
+            const reportDate = new Date().toLocaleDateString();
+
+            let html = `
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RTK Report - ${sessionName}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #2c3e50; }
+        h2 { color: #34495e; margin-top: 30px; }
+        .stats { background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0; }
+        .image-entry { margin: 15px 0; padding: 10px; border-left: 3px solid #3498db; }
+        .filename { font-weight: bold; color: #2c3e50; }
+        .coordinates { color: #7f8c8d; font-style: italic; }
+        .rtk-data { margin-left: 20px; color: #27ae60; }
+        .rtk-field { margin: 3px 0; }
+        .no-rtk { color: #e74c3c; font-style: italic; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <h1>RTK Analysis Report</h1>
+    <p><strong>Session:</strong> ${sessionName}</p>
+    <p><strong>Report Date:</strong> ${reportDate}</p>
+    <p><strong>Total Images:</strong> ${this.imageData.length}</p>
+
+    <div class="stats">
+        <h2>RTK Statistics</h2>
+        <table>
+            <tr><th>RTK Status</th><th>Count</th></tr>
+            <tr><td>RTK Fixed</td><td>${rtkStats.fixed}</td></tr>
+            <tr><td>RTK Float</td><td>${rtkStats.float}</td></tr>
+            <tr><td>RTK Single</td><td>${rtkStats.single}</td></tr>
+            <tr><td>No RTK Data</td><td>${rtkStats.noRtk}</td></tr>
+        </table>
+        <p><strong>Average Correction Age:</strong> ${rtkStats.avgCorrectionAge}</p>
+    </div>
+
+    <h2>Image Details</h2>`;
+
+            this.imageData.forEach(image => {
+                html += `
+    <div class="image-entry">
+        <div class="filename">${image.filename}</div>
+        <div class="coordinates">GPS Coordinates: ${image.latitude.toFixed(6)}, ${image.longitude.toFixed(6)}</div>`;
+
+                if (image.rtk && (image.rtk.status !== null || image.rtk.processingMethod !== null)) {
+                    html += `
+        <div class="rtk-data">
+            <div class="rtk-field">RTK Status: ${image.rtk.status !== null ? this.getRTKStatusText(image.rtk.status) : 'N/A'}</div>
+            <div class="rtk-field">Processing Method: ${image.rtk.processingMethod || 'N/A'}</div>
+            <div class="rtk-field">Horizontal Accuracy: ${image.rtk.horizontalAccuracy !== null ? image.rtk.horizontalAccuracy + 'm' : 'N/A'}</div>
+            <div class="rtk-field">Vertical Accuracy: ${image.rtk.verticalAccuracy !== null ? image.rtk.verticalAccuracy + 'm' : 'N/A'}</div>
+            <div class="rtk-field">DOP: ${image.rtk.dop || 'N/A'}</div>
+            <div class="rtk-field">Differential: ${image.rtk.differential || 'N/A'}</div>
+            <div class="rtk-field">Correction Age: ${image.rtk.correctionAge !== null ? image.rtk.correctionAge + 'ms' : 'N/A'}</div>
+        </div>`;
+                } else {
+                    html += `
+        <div class="no-rtk">No RTK data available</div>`;
+                }
+
+                html += `
+    </div>`;
+            });
+
+            html += `
+</body>
+</html>`;
+
+            return html;
         }
 
         /**

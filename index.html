@@ -41,6 +41,15 @@
                 </div>
                 <button id="select-folder" class="secondary-btn">Select Folder (Browser)</button>
                 <input type="file" id="folder-input" webkitdirectory directory style="display:none;">
+                
+                <div id="rtk-options" class="rtk-section">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="rtk-enabled">
+                        <span class="checkmark"></span>
+                        <span class="checkbox-label">Enable RTK Analysis</span>
+                    </label>
+                    <p class="hint">Extract RTK (Real-Time Kinematic) GPS data for high-precision positioning analysis. Adds processing overhead.</p>
+                </div>
             </div>
 
             <div id="stats" style="display:none;">
@@ -56,6 +65,7 @@
                 <button id="add-more-btn" class="secondary-btn">Add More Images</button>
                 <button id="done-btn" class="primary-btn">I'm Done – Generate KML</button>
                 <button id="download-kml" class="success-btn" style="display:none;">Download KML</button>
+                <button id="download-rtk-report" class="secondary-btn" style="display:none;">Download RTK Report</button>
                 <button id="open-mymaps" class="accent-btn" style="display:none;">Open in Google My Maps</button>
                 <p id="mymaps-hint" class="hint" style="display:none;">We will download the latest KML and open My Maps in a new tab. Choose "Create a new map" → "Import" and select the downloaded file.</p>
                 <button id="view-errors" class="warning-btn" style="display:none;">View Error Report</button>
