@@ -878,7 +878,7 @@ body:not(.light-theme) #stats-content span {
 }
 
 body.dark-theme .rtk-section {
-    background: #1e293b;
+    background: rgba(15, 23, 42, 0.8);
     border-color: #334155;
 }
 
@@ -944,7 +944,7 @@ body.light-theme .checkbox-label {
 }
 
 body.dark-theme .checkbox-label {
-    color: #e2e8f0;
+    color: #f8fafc;
 }
 
 .rtk-section .hint {
@@ -959,5 +959,5 @@ body.light-theme .rtk-section .hint {
 }
 
 body.dark-theme .rtk-section .hint {
-    color: #94a3b8;
+    color: #cbd5e1;
 }
