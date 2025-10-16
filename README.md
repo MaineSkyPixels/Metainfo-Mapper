@@ -20,6 +20,7 @@ A privacy-first, client-side web application for visualizing drone imagery GPS m
 - **Browser-only workflow** – EXIF parsing and KML generation happen entirely in the user's browser, so no media is uploaded.
 - **Instant previews** – Load thousands of images (JPG, TIFF, PNG, RAW) and visualise metadata immediately, even when you stay offline.
 - **Mission storytelling** – Build sessions, visualise paths, surface GPS gaps, and export shareable KML in seconds.
+- **RTK Analysis** – Optional Real-Time Kinematic GPS analysis with color-coded markers, detailed statistics, and comprehensive reporting.
 - **Blank canvas default** – Images are plotted on a clean canvas with georeferenced positioning by default.
 - **Optional Mapbox integration** – Add satellite imagery backgrounds with a free Mapbox token (completely optional).
 - **Community support** – Join our Discord server for help, feedback, and feature requests.
@@ -35,11 +36,54 @@ A privacy-first, client-side web application for visualizing drone imagery GPS m
 ## Usage
 
 1. Name your mission and click **Start New Session**.
-2. Drag-and-drop image files (JPG, TIFF, PNG, RAW) or choose a folder; EXIF is parsed locally.
-3. Inspect markers, paths, and GPS gaps directly on the map.
-4. Export the session as KML or download the error log for documentation.
-5. Click **Open in Google My Maps** to download the latest KML and launch My Maps, then choose "Create a new map" → "Import" and select the downloaded file.
-6. Load previous KML sessions to continue work.
+2. **Optional**: Enable **RTK Analysis** checkbox for high-precision GPS analysis (adds processing overhead).
+3. Drag-and-drop image files (JPG, TIFF, PNG, RAW) or choose a folder; EXIF is parsed locally.
+4. Inspect markers, paths, and GPS gaps directly on the map.
+   - **RTK Mode**: Green markers indicate RTK Fixed images, red markers indicate RTK Single or no RTK data.
+5. View enhanced statistics including RTK Fixed/Float/Single counts and mean correction age (if RTK enabled).
+6. Export the session as KML or download the error log for documentation.
+   - **RTK Mode**: KML exports include all 7 RTK data fields for each image.
+   - **RTK Mode**: Generate detailed HTML RTK analysis reports.
+7. Click **Open in Google My Maps** to download the latest KML and launch My Maps, then choose "Create a new map" → "Import" and select the downloaded file.
+8. Load previous KML sessions to continue work.
+
+### RTK Analysis Feature
+
+**Real-Time Kinematic (RTK) GPS Analysis** is an optional feature that provides high-precision positioning analysis for drone imagery with RTK capabilities.
+
+#### Enabling RTK Analysis:
+- Check the **"Enable RTK Analysis"** checkbox before loading images
+- This feature adds processing overhead, so it's disabled by default
+- Only enable when working with DJI drones that support RTK GPS
+
+#### RTK Capabilities:
+- **Visual Indicators**: 
+  - 🟢 Green markers = RTK Fixed (highest precision)
+  - 🔴 Red markers = RTK Single or no RTK data (lower precision)
+- **Statistics Tracking**:
+  - RTK Fixed count
+  - RTK Float count  
+  - RTK Single count
+  - Mean Correction Age (average across dataset)
+- **Data Fields Extracted**:
+  - `RtkFlag` - RTK status indicator
+  - `RtkStdLon` - Standard deviation longitude
+  - `RtkStdLat` - Standard deviation latitude
+  - `RtkStdHgt` - Standard deviation height
+  - `RtkDiffAge` - Differential age in milliseconds
+  - `GPSProcessingMethod` - Processing method used
+  - Accuracy measurements (horizontal/vertical)
+- **Export Features**:
+  - All RTK fields embedded in KML exports
+  - Detailed HTML RTK analysis reports
+  - Filename, coordinates, and complete RTK field breakdown
+
+#### Compatible Equipment:
+- DJI Phantom 4 RTK
+- DJI Matrice 300 RTK
+- DJI Mavic 2 Enterprise Advanced
+- Other DJI drones with RTK capabilities
+- Images must contain XMP RTK metadata
 
 ### Token Help
 
@@ -60,12 +104,34 @@ A privacy-first, client-side web application for visualizing drone imagery GPS m
 
 ```
 
+## Technical Capabilities
+
+### EXIF Processing:
+- **Standard GPS**: Latitude, longitude, altitude, timestamp extraction
+- **RTK Analysis**: Real-Time Kinematic GPS data extraction and analysis
+- **Enhanced Metadata**: Camera make/model, processing method, accuracy measurements
+- **Multi-format Support**: JPG, TIFF, PNG, RAW formats (DNG, CR2, NEF, ARW, ORF, RW2, PEF, SRW)
+- **Full exifr Build**: Comprehensive metadata extraction including XMP namespaces
+
+### Performance Optimizations:
+- **Client-side Processing**: All EXIF parsing and KML generation in browser
+- **Memory Efficient**: Handles thousands of images with progress feedback
+- **Optimized CSS**: 21% size reduction with organized structure and faster parsing
+- **Theme System**: Unified dark/light theme handling with CSS variables
+
+### Export Capabilities:
+- **KML Generation**: Standard GPS data with optional RTK field embedding
+- **HTML Reports**: Detailed RTK analysis reports with field breakdowns
+- **Error Logging**: Comprehensive error tracking and reporting
+- **Google My Maps**: Direct integration for easy sharing and visualization
+
 ## Security Posture
 
 - No uploads, no server processing. All EXIF parsing and KML generation run in your browser.
 - Tokens are stored in your browser's localStorage and are not sent to the server.
 - KML/HTML exports escape user‑provided text to prevent injection.
 - Mapbox tokens are only passed directly to Mapbox's API from your browser - never through our servers.
+- RTK data processing occurs entirely client-side with no external data transmission.
 
 ## Community & Support
 
@@ -84,6 +150,8 @@ A privacy-first, client-side web application for visualizing drone imagery GPS m
 - Supported formats: JPG, TIFF, PNG, and RAW formats (DNG, CR2, NEF, ARW, ORF, RW2, PEF, SRW).
 - Consider self-hosting Leaflet/JSZip/exifr bundles for completely offline environments.
 - Version tracking: Current version #101625b (MMDDYY + update letter format)
+- **RTK Analysis**: Optional high-precision GPS analysis for DJI RTK-capable drones
+- **Enhanced Performance**: Optimized CSS structure with 21% size reduction and improved loading
 - Regenerate the client bundle with `npm run build:client` before redeploying.
 
 ## Version Numbering System
@@ -134,7 +202,7 @@ When reviewing this codebase, the build number indicates when changes were made.
 - **Change styles.css** → Update build number in styles.css
 
 ### Current Build Number:
-`#101625b` (October 16, 2025, second update)
+`#101625c` (October 16, 2025, third update - RTK Analysis feature and CSS cleanup)
 
 This protocol ensures that by looking at the build number in any file, you can immediately see when that specific file was last modified, making development tracking much easier.
 
