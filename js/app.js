@@ -1405,6 +1405,11 @@
                     details.push(`Alt: ${image.altitude.toFixed(1)}m`);
                 }
 
+                let styleUrl = '#imagePoint';
+                if (this.rtkOptions.enabled && image.rtk?.status !== 50) {
+                    styleUrl = '#imagePointWarning';
+                }
+
                 // Add RTK data if available
                 if (this.rtkOptions.enabled && image.rtk) {
                     details.push('--- RTK Data ---');
@@ -1441,7 +1446,7 @@
                 return `      <Placemark>
         <name></name>
         <description>${escapeXml(details.join('\\n'))}</description>
-        <styleUrl>#imagePoint</styleUrl>
+        <styleUrl>${styleUrl}</styleUrl>
         <Point>
           <coordinates>${image.longitude},${image.latitude},${image.altitude || 0}</coordinates>
         </Point>
@@ -1459,6 +1464,15 @@
         <scale>0.8</scale>
         <Icon>
           <href>http://maps.google.com/mapfiles/kml/shapes/camera.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <Style id="imagePointWarning">
+      <IconStyle>
+        <color>ff0000ff</color>
+        <scale>0.8</scale>
+        <Icon>
+          <href>http://maps.google.com/mapfiles/kml/pushpin/red-pushpin.png</href>
         </Icon>
       </IconStyle>
     </Style>
