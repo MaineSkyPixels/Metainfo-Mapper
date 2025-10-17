@@ -33,7 +33,7 @@
 
 
             <div id="upload-section" style="display:none;">
-                <h3>Add Images <span class="help-icon" data-tooltip="Drag and drop image files or folders containing JPG, TIFF, PNG, or RAW formats. All processing happens locally in your browser - no files are uploaded to any server. Supported RAW formats include DNG, CR2, NEF, ARW, ORF, RW2, PEF, and SRW.">?</span></h3>
+                <h3>Add Images <span class="help-icon" data-help-title="Add Images" data-help-content="Drag and drop image files or folders containing JPG, TIFF, PNG, or RAW formats. All processing happens locally in your browser - no files are uploaded to any server.<br><br>Supported RAW formats include DNG, CR2, NEF, ARW, ORF, RW2, PEF, and SRW.">?</span></h3>
                 <div id="drop-zone">
                     <p>Drop images/folders here<br>or click to browse</p>
                     <input type="file" id="file-input" multiple accept=".jpg,.jpeg,.tif,.tiff,.png,.dng,.raw,.cr2,.nef,.arw,.orf,.rw2,.pef,.srw" style="display:none;">
@@ -46,7 +46,7 @@
                         <input type="checkbox" id="rtk-enabled">
                         <span class="checkmark"></span>
                         <span class="checkbox-label">Enable RTK Analysis</span>
-                        <span class="help-icon" data-tooltip="Extract RTK (Real-Time Kinematic) GPS data for high-precision positioning analysis. Adds processing overhead. Works with DJI RTK-capable drones like Phantom 4 RTK, Matrice 300 RTK, and Mavic 2 Enterprise Advanced.">?</span>
+                        <span class="help-icon" data-help-title="RTK Analysis" data-help-content="Extract RTK (Real-Time Kinematic) GPS data for high-precision positioning analysis. Adds processing overhead but provides centimeter-level accuracy data.<br><br>Works with DJI RTK-capable drones like:<br>• Phantom 4 RTK<br>• Matrice 300 RTK<br>• Mavic 2 Enterprise Advanced<br>• Matrice 30 Series">?</span>
                     </label>
                 </div>
             </div>
@@ -82,8 +82,8 @@
 
             <div id="mapbox-config" class="token-card">
                 <h3>Basemap Token (Optional)</h3>
-                <p class="hint" style="font-size: 12px;"><span class="help-icon" data-tooltip="Mapbox tokens provide access to satellite imagery and map tiles. You can get a free token by creating a Mapbox account. The token enables hybrid satellite backgrounds for better visualization of your drone imagery locations.">?</span></p>
-                <p class="hint" style="font-size: 12px;"><span class="help-icon" data-tooltip="Your Mapbox token persists in your browser's local storage, so you only need to enter it once. It will remain active until you manually clear it or clear your browser data for this site.">?</span></p>
+                <p class="hint" style="font-size: 12px;"><span class="help-icon" data-help-title="Mapbox Token" data-help-content="Mapbox tokens provide access to satellite imagery and map tiles. You can get a free token by creating a Mapbox account.<br><br>The token enables hybrid satellite backgrounds for better visualization of your drone imagery locations.">?</span></p>
+                <p class="hint" style="font-size: 12px;"><span class="help-icon" data-help-title="Token Storage" data-help-content="Your Mapbox token persists in your browser's local storage, so you only need to enter it once.<br><br>It will remain active until you manually clear it or clear your browser data for this site.">?</span></p>
                 <p class="hint" style="font-size: 12px;">The token is not uploaded to the server and is only passed directly to Mapbox from <strong><u>your browser directly</u></strong>.</p>
                 <input type="text" id="mapbox-token-input" placeholder="pk.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" autocomplete="off" spellcheck="false">
                 <button id="mapbox-token-apply" class="primary-btn">Use Mapbox Token</button>
@@ -157,6 +157,18 @@
                 <li>This project is still in active development and bugs may occur.</li>
             </ul>
             <button id="privacy-ack-btn" class="primary-btn">Sounds good</button>
+        </div>
+    </div>
+
+    <!-- Help Popup -->
+    <div id="help-popup-overlay" class="help-popup-overlay"></div>
+    <div id="help-popup" class="help-popup">
+        <div class="help-popup-header">
+            <h3 class="help-popup-title" id="help-popup-title">Help</h3>
+            <button class="help-popup-close" id="help-popup-close">&times;</button>
+        </div>
+        <div class="help-popup-content" id="help-popup-content">
+            Help content will be loaded here.
         </div>
     </div>
 

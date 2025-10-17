@@ -597,8 +597,8 @@
                 this.collapseHeroOverlay();
             });
 
-            // Smart tooltip positioning
-            this.setupSmartTooltips();
+            // Help popup system
+            this.setupHelpPopups();
 
             document.getElementById('download-kml').addEventListener('click', () => this.downloadKML());
             document.getElementById('download-rtk-report').addEventListener('click', () => this.downloadRTKReport());
@@ -1666,73 +1666,79 @@ ${this.errorData.map(error => `
         }
 
         /**
-         * Setup smart tooltip positioning to keep tooltips within browser window
+         * Setup help popup system
          */
-        setupSmartTooltips() {
+        setupHelpPopups() {
             // Use a small delay to ensure DOM is fully ready
             setTimeout(() => {
                 const helpIcons = document.querySelectorAll('.help-icon');
+                const popup = document.getElementById('help-popup');
+                const overlay = document.getElementById('help-popup-overlay');
+                const title = document.getElementById('help-popup-title');
+                const content = document.getElementById('help-popup-content');
+                const closeBtn = document.getElementById('help-popup-close');
+                
                 console.log('Found help icons:', helpIcons.length);
                 
+                // Add click listeners to help icons
                 helpIcons.forEach((icon, index) => {
-                    console.log(`Setting up tooltip for icon ${index}`);
-                    icon.addEventListener('mouseenter', () => {
-                        console.log('Mouse entered help icon, positioning tooltip');
-                        this.positionTooltip(icon);
-                    });
-                    
-                    // Update position on window resize
-                    window.addEventListener('resize', () => {
-                        if (icon.matches(':hover')) {
-                            this.positionTooltip(icon);
-                        }
+                    console.log(`Setting up help popup for icon ${index}`);
+                    icon.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        const helpTitle = icon.getAttribute('data-help-title') || 'Help';
+                        const helpContent = icon.getAttribute('data-help-content') || 'No help content available.';
+                        
+                        console.log('Opening help popup:', helpTitle);
+                        
+                        title.textContent = helpTitle;
+                        content.innerHTML = helpContent;
+                        
+                        this.showHelpPopup();
                     });
                 });
+                
+                // Close popup handlers
+                closeBtn.addEventListener('click', () => this.hideHelpPopup());
+                overlay.addEventListener('click', () => this.hideHelpPopup());
+                
+                // Close on Escape key
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && popup.classList.contains('show')) {
+                        this.hideHelpPopup();
+                    }
+                });
+                
             }, 100);
         }
 
         /**
-         * Position tooltip to stay within browser window bounds
+         * Show help popup
          */
-        positionTooltip(icon) {
-            const rect = icon.getBoundingClientRect();
-            const viewportWidth = window.innerWidth;
-            const tooltipWidth = 400; // Match CSS width
-            const margin = 50; // Increased safety margin
+        showHelpPopup() {
+            const popup = document.getElementById('help-popup');
+            const overlay = document.getElementById('help-popup-overlay');
             
-            console.log('Positioning tooltip:', {
-                rectLeft: rect.left,
-                rectRight: rect.right,
-                viewportWidth: viewportWidth,
-                tooltipWidth: tooltipWidth
-            });
+            overlay.classList.add('show');
+            popup.classList.add('show');
             
-            // Remove any existing positioning classes
-            icon.classList.remove('tooltip-left', 'tooltip-right');
+            // Prevent body scrolling
+            document.body.style.overflow = 'hidden';
+        }
+
+        /**
+         * Hide help popup
+         */
+        hideHelpPopup() {
+            const popup = document.getElementById('help-popup');
+            const overlay = document.getElementById('help-popup-overlay');
             
-            // Calculate if tooltip would overflow
-            const leftOverflow = rect.left - (tooltipWidth / 2) < margin;
-            const rightOverflow = rect.right + (tooltipWidth / 2) > viewportWidth - margin;
+            overlay.classList.remove('show');
+            popup.classList.remove('show');
             
-            console.log('Overflow calculations:', {
-                leftOverflow: leftOverflow,
-                rightOverflow: rightOverflow,
-                leftDistance: rect.left,
-                rightDistance: viewportWidth - rect.right
-            });
-            
-            // Only apply positioning if there's significant overflow
-            if (leftOverflow && !rightOverflow && rect.left < tooltipWidth) {
-                // Only position right if icon is very close to left edge
-                console.log('Applying tooltip-right class');
-                icon.classList.add('tooltip-right');
-            } else if (rightOverflow && !leftOverflow && (viewportWidth - rect.right) < tooltipWidth) {
-                // Only position left if icon is very close to right edge
-                console.log('Applying tooltip-left class');
-                icon.classList.add('tooltip-left');
-            } else {
-                console.log('Using default centered positioning');
-            }
+            // Restore body scrolling
+            document.body.style.overflow = '';
         }
     }
 
