@@ -5,3 +5,5 @@
 - Tightened performance hints by limiting will-change to active elements and moving the progress animation hint to #progress-fill.
 - Restored progress bar structure (#progress-bar container + #progress-fill fill rules) while keeping map overlay containment logic intact.
 - Added build comment to the stylesheet per file-tracking protocol.
+
+- Updated css/styles.css (Build #101625g) to give dark-theme Leaflet popups a dark wrapper, light text, and matching tip while keeping light theme on white.

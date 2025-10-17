@@ -2,7 +2,7 @@
    METAINFO MAPPER - CLEAN CSS STRUCTURE
    ======================================== */
 
-/* Build: #101625f */
+/* Build: #101625g */
 
 /* ========================================
    PERFORMANCE OPTIMIZATIONS
@@ -793,21 +793,37 @@ hr {
    ======================================== */
 /* Leaflet popup styling - ensure readability */
 .leaflet-popup-content-wrapper {
-    background: white !important;
+    background: rgba(15, 23, 42, 0.96);
+    color: #f8fafc;
+    border-radius: 10px;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
 }
-
 .leaflet-popup-content {
     margin: 8px;
     font-size: 13px;
-    color: #000000 !important;
-    background: white !important;
+    color: inherit;
+    background: transparent;
 }
-
-/* Dark theme Leaflet popup styling */
-/* Override any inherited colors */
+.leaflet-popup-tip {
+    background: rgba(15, 23, 42, 0.96);
+}
 .leaflet-popup-content-wrapper .leaflet-popup-content,
 .leaflet-popup-content-wrapper .leaflet-popup-content * {
-    color: #000000 !important;
+    color: inherit;
+}
+body.light-theme .leaflet-popup-content-wrapper {
+    background: #ffffff;
+    color: #213548;
+    border: 1px solid rgba(27, 110, 239, 0.16);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+}
+body.light-theme .leaflet-popup-content {
+    color: #213548;
+    background: transparent;
+}
+body.light-theme .leaflet-popup-tip {
+    background: #ffffff;
 }
 
 /* Specific overrides for dark theme */
