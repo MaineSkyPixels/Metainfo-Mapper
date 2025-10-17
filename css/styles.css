@@ -877,13 +877,21 @@ body.light-theme #mapbox-token-status {
    ======================================== */
 .popup {
     position: absolute;
-    background: white;
+    background: var(--card-bg);
+    color: var(--text-primary);
     padding: 8px 12px;
     border-radius: 4px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     z-index: 1000;
     pointer-events: none;
     font-size: 13px;
+    border: 1px solid var(--border-soft);
+}
+
+body.light-theme .popup {
+    background: white;
+    color: #213548;
+    border: 1px solid #e5e7eb;
 }
 
 /* Help Icons and Tooltips */

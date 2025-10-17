@@ -43,8 +43,7 @@
             };
 
             this.themeState = {
-                toggleButton: document.getElementById('theme-toggle'),
-                storedPreference: null
+                toggleButton: document.getElementById('theme-toggle')
             };
 
             this.rtkOptions = {
@@ -872,16 +871,6 @@
         }
 
         /**
-         * Collapse hero overlay
-         */
-        collapseHeroOverlay() {
-            const hero = document.getElementById('map-hero');
-            if (hero) {
-                hero.classList.add('collapsed');
-            }
-        }
-
-        /**
          * Initialize privacy notice
          */
         initPrivacyNotice() {
@@ -1087,22 +1076,18 @@
                 
                 if (this.rtkOptions.enabled && image.rtk) {
                     let hasRtkData = false;
-                    let rtkQuality = 'none';
                     
                     // Check for RTK status
                     if (image.rtk.status !== null) {
                         const status = image.rtk.status;
                         if (status === 50) {
                             markerColor = '#00ff00'; // RTK Fixed - Green
-                            rtkQuality = 'fixed';
                             hasRtkData = true;
                         } else if (status === 34) {
                             markerColor = '#00ff00'; // RTK Float - Green
-                            rtkQuality = 'float';
                             hasRtkData = true;
                         } else if (status === 16) {
                             markerColor = '#ff0000'; // RTK Single - Red
-                            rtkQuality = 'single';
                             hasRtkData = true;
                         }
                     }
@@ -1110,14 +1095,12 @@
                     // Check for RTK standard deviations (indicates RTK data)
                     if (!hasRtkData && (image.rtk.rtkStdLon !== null || image.rtk.rtkStdLat !== null || image.rtk.rtkStdHgt !== null)) {
                         markerColor = '#00ff00'; // Assume good quality if we have std dev data
-                        rtkQuality = 'std_dev';
                         hasRtkData = true;
                     }
                     
                     // Check for GPS differential (indicates RTK correction)
                     if (!hasRtkData && image.rtk.differential !== null && image.rtk.differential !== 0) {
                         markerColor = '#00ff00'; // Assume good quality if differential correction was applied
-                        rtkQuality = 'differential';
                         hasRtkData = true;
                     }
                     
