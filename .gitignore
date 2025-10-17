@@ -29,6 +29,7 @@ build/
 .idea/
 *.swp
 *.swo
+.cursor/rules
 
 # OS generated files
 .DS_Store
@@ -96,3 +97,5 @@ jspm_packages/
 
 .gemini/
 gha-creds-*.json
+
+.github/workflows
