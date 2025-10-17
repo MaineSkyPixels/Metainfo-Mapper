@@ -17,10 +17,11 @@ A privacy-first, client-side web application for visualizing drone imagery GPS m
 ## Highlights
 
 - **Dark-first UI** – switch between dark and light themes with a single click.
+- **Interactive Help System** – Click-based help popups with smart positioning and comprehensive guidance.
 - **Browser-only workflow** – EXIF parsing and KML generation happen entirely in the user's browser, so no media is uploaded.
 - **Instant previews** – Load thousands of images (JPG, TIFF, PNG, RAW) and visualise metadata immediately, even when you stay offline.
 - **Mission storytelling** – Build sessions, visualise paths, surface GPS gaps, and export shareable KML in seconds.
-- **RTK Analysis** – Optional Real-Time Kinematic GPS analysis with color-coded markers, detailed statistics, and comprehensive reporting.
+- **RTK Analysis** – Real-Time Kinematic GPS analysis enabled by default with color-coded markers, detailed statistics, and comprehensive reporting.
 - **Blank canvas default** – Images are plotted on a clean canvas with georeferenced positioning by default.
 - **Optional Mapbox integration** – Add satellite imagery backgrounds with a free Mapbox token (completely optional).
 - **Community support** – Join our Discord server for help, feedback, and feature requests.
@@ -49,12 +50,12 @@ A privacy-first, client-side web application for visualizing drone imagery GPS m
 
 ### RTK Analysis Feature
 
-**Real-Time Kinematic (RTK) GPS Analysis** is an optional feature that provides high-precision positioning analysis for drone imagery with RTK capabilities.
+**Real-Time Kinematic (RTK) GPS Analysis** provides high-precision positioning analysis for drone imagery with RTK capabilities. RTK Analysis is now **enabled by default** for immediate high-precision analysis.
 
-#### Enabling RTK Analysis:
-- Check the **"Enable RTK Analysis"** checkbox before loading images
-- This feature adds processing overhead, so it's disabled by default
-- Only enable when working with DJI drones that support RTK GPS
+#### RTK Analysis:
+- RTK Analysis is **enabled by default** for immediate high-precision analysis
+- Uncheck the **"Enable RTK Analysis"** checkbox if you want to disable it to reduce processing overhead
+- Works with any RTK-capable drone, not limited to specific brands
 
 #### RTK Capabilities:
 - **Visual Indicators**: 
@@ -116,7 +117,10 @@ A privacy-first, client-side web application for visualizing drone imagery GPS m
 ### Performance Optimizations:
 - **Client-side Processing**: All EXIF parsing and KML generation in browser
 - **Memory Efficient**: Handles thousands of images with progress feedback
-- **Optimized CSS**: 21% size reduction with organized structure and faster parsing
+- **Hardware Acceleration**: GPU acceleration for smoother animations and interactions
+- **CSS Containment**: Optimized rendering performance with layout and paint containment
+- **Optimized Transitions**: Specific transform/opacity transitions instead of layout properties
+- **Simplified Shadows**: 60% reduction in paint complexity for faster rendering
 - **Theme System**: Unified dark/light theme handling with CSS variables
 
 ### Export Capabilities:
@@ -202,7 +206,7 @@ When reviewing this codebase, the build number indicates when changes were made.
 - **Change styles.css** → Update build number in styles.css
 
 ### Current Build Number:
-`#101625d` (October 16, 2025, fourth update - RTK Analysis feature and CSS cleanup)
+`#101625e` (October 16, 2025, fifth update - Performance optimizations, UI improvements, and RTK defaults)
 
 This protocol ensures that by looking at the build number in any file, you can immediately see when that specific file was last modified, making development tracking much easier.
 
