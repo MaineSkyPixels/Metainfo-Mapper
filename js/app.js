@@ -1244,6 +1244,10 @@
             let fixed = 0, float = 0, single = 0, noRtk = 0;
             let correctionAgeSum = 0;
             let correctionAgeCount = 0;
+            let fixedCorrectionAgeSum = 0;
+            let fixedCorrectionAgeCount = 0;
+            let highCorrectionAgeSum = 0;
+            let highCorrectionAgeCount = 0;
             let horizontalAccuracySum = 0;
             let horizontalAccuracyCount = 0;
             let verticalAccuracySum = 0;
@@ -1257,7 +1261,13 @@
                     // Check for RTK status
                     if (image.rtk.status !== null) {
                         const status = image.rtk.status;
-                        if (status === 50) fixed++;
+                        if (status === 50) {
+                            fixed++;
+                            if (typeof image.rtk.correctionAge === 'number') {
+                                fixedCorrectionAgeSum += image.rtk.correctionAge;
+                                fixedCorrectionAgeCount++;
+                            }
+                        }
                         else if (status === 34) float++;
                         else if (status === 16) single++;
                         else noRtk++;
@@ -1286,6 +1296,8 @@
                         correctionAgeCount++;
                         if (image.rtk.correctionAge > 5) {
                             correctionAgeExceededCount++;
+                            highCorrectionAgeSum += image.rtk.correctionAge;
+                            highCorrectionAgeCount++;
                         }
                     }
 
@@ -1305,8 +1317,12 @@
                 }
             });
 
-            const avgCorrectionAge = correctionAgeCount > 0 
-                ? (correctionAgeSum / correctionAgeCount).toFixed(2) + ' ms'
+            const avgFixedCorrectionAge = fixedCorrectionAgeCount > 0
+                ? (fixedCorrectionAgeSum / fixedCorrectionAgeCount).toFixed(2) + ' ms'
+                : 'N/A';
+
+            const avgHighCorrectionAge = highCorrectionAgeCount > 0
+                ? (highCorrectionAgeSum / highCorrectionAgeCount).toFixed(2) + ' ms'
                 : 'N/A';
 
             const avgHorizontalAccuracy = horizontalAccuracyCount > 0
@@ -1317,7 +1333,7 @@
                 ? (verticalAccuracySum / verticalAccuracyCount).toFixed(4) + ' m'
                 : 'N/A';
 
-            return { fixed, float, single, noRtk, avgCorrectionAge, avgHorizontalAccuracy, avgVerticalAccuracy, correctionAgeExceededCount };
+            return { fixed, float, single, noRtk, avgFixedCorrectionAge, avgHighCorrectionAge, avgHorizontalAccuracy, avgVerticalAccuracy, correctionAgeExceededCount };
         }
 
         /**
@@ -1511,6 +1527,8 @@ ${placemarks}
                 return 0;
             });
 
+            const showBanner = rtkStats.float > 0 || rtkStats.single > 0 || rtkStats.noRtk > 0;
+
             let html = `
 <!DOCTYPE html>
 <html>
@@ -1564,6 +1582,21 @@ ${placemarks}
             border-bottom: 1px solid #e5e7eb;
             padding-bottom: 8px;
         }
+        .banner {
+            background-color: #fef2f2;
+            color: #ef4444;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #fecaca;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .banner h2 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: underline;
+        }
         .stats { 
             background: #f9fafb; 
             padding: 20px; 
@@ -1585,6 +1618,7 @@ ${placemarks}
         .no-rtk { color: #ef4444; font-style: italic; }
         .rtk-single { color: #ef4444; }
         .warning { color: #f59e0b; }
+        .danger { color: #ef4444; }
         table { 
             border-collapse: collapse; 
             width: 100%; 
@@ -1608,6 +1642,12 @@ ${placemarks}
             <a href="https://metainfomapper.com" target="_blank" rel="noopener">metainfomapper.com</a>
         </div>
         
+        ${showBanner ? `
+        <div class="banner">
+            <h2>POSSIBLE RTK FAILURE DURING MISSION</h2>
+        </div>
+        ` : ''}
+
         <h1>RTK Analysis Report</h1>
         <p><strong>Session:</strong> ${sessionName}</p>
         <p><strong>Report Date:</strong> ${reportDate}</p>
@@ -1624,7 +1664,8 @@ ${placemarks}
             </table>
             <p><strong>Average Horizontal Deviation:</strong> ${rtkStats.avgHorizontalAccuracy}</p>
             <p><strong>Average Vertical Deviation:</strong> ${rtkStats.avgVerticalAccuracy}</p>
-            <p><strong>Average Correction Age:</strong> ${rtkStats.avgCorrectionAge}</p>
+            <p><strong>Average Correction Age (RTK Fixed):</strong> ${rtkStats.avgFixedCorrectionAge}</p>
+            <p class="danger"><strong>Average Correction Age (>5ms):</strong> ${rtkStats.avgHighCorrectionAge}</p>
             <p class="warning"><strong>Images with Correction Age > 5ms:</strong> ${rtkStats.correctionAgeExceededCount}</p>
         </div>
 
