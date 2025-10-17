@@ -2,6 +2,8 @@
    METAINFO MAPPER - CLEAN CSS STRUCTURE
    ======================================== */
 
+/* Build: #101625f */
+
 /* ========================================
    PERFORMANCE OPTIMIZATIONS
    ======================================== */
@@ -13,17 +15,7 @@
     contain: layout style paint;
 }
 
-.map-intro-card,
-.map-about-card {
-    will-change: transform;
-    transform: translateZ(0);
-}
-
-.help-icon,
-.primary-btn,
-.secondary-btn,
-.token-card,
-.rtk-section {
+.help-icon {
     will-change: transform;
 }
 
@@ -37,12 +29,7 @@
     transform: translateZ(0);
 }
 
-.map-overlay {
-    will-change: transform, opacity;
-    transform: translateZ(0);
-}
-
-#progress-bar {
+#progress-fill {
     will-change: width;
     transform: translateZ(0);
 }
@@ -203,27 +190,6 @@ body:not(.light-theme) .hint {
 /* ========================================
    7. CARDS & COMPONENTS
    ======================================== */
-.intro-card {
-    background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(56, 189, 248, 0.05));
-    border: 1px solid rgba(56,189,248,0.35);
-    border-radius: 12px;
-    padding: 16px 18px;
-    margin-bottom: 20px;
-    color: var(--text-primary);
-}
-
-body.light-theme .intro-card {
-    color: #213548;
-    background: linear-gradient(135deg, rgba(27, 110, 239, 0.1), rgba(27, 110, 239, 0.02));
-    border-color: rgba(27,110,239,0.18);
-}
-
-.intro-card p {
-    font-size: 14px;
-    line-height: 1.5;
-    margin-bottom: 14px;
-}
-
 .token-card {
     margin: 20px 0;
     padding: 16px 18px;
@@ -255,42 +221,6 @@ body.light-theme .token-card h3 {
 
 .token-card .hint {
     margin-bottom: 12px;
-}
-
-.about-card {
-    margin-top: 28px;
-    padding: 18px 20px;
-    border-radius: 12px;
-    background: rgba(15, 23, 42, 0.45);
-    border: 1px solid rgba(148, 163, 184, 0.25);
-}
-
-body.light-theme .about-card {
-    background: rgba(15, 23, 42, 0.05);
-    border: 1px solid rgba(15, 23, 42, 0.08);
-}
-
-.about-card h3 {
-    margin-top: 0;
-    font-size: 15px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: #25364d;
-}
-
-.about-card ul {
-    list-style: none;
-    display: grid;
-    gap: 8px;
-    margin-top: 12px;
-    font-size: 13px;
-    color: #425466;
-}
-
-.about-card li::before {
-    content: '•';
-    color: #1b6eef;
-    margin-right: 8px;
 }
 
 /* ========================================
@@ -744,29 +674,6 @@ body.light-theme .map-about-card li::before {
     background: #1b6eef;
 }
 
-.map-overlay {
-    pointer-events: none;
-    transition: transform 0.35s ease, opacity 0.35s ease;
-}
-
-.map-overlay.collapsed {
-    top: 18px;
-    right: 18px;
-    padding: 12px 16px;
-    opacity: 0.9;
-}
-
-.map-overlay.collapsed h2 {
-    font-size: 18px;
-    margin-bottom: 4px;
-}
-
-.map-overlay.collapsed p {
-    font-size: 12px;
-    color: var(--text-secondary);
-    margin: 0;
-}
-
 /* ========================================
    15. MODALS
    ======================================== */
@@ -781,10 +688,6 @@ body.light-theme .map-about-card li::before {
     display: none;
     align-items: center;
     justify-content: center;
-}
-
-.modal.active {
-    display: flex !important;
 }
 
 .modal-content {
@@ -901,11 +804,6 @@ hr {
 }
 
 /* Dark theme Leaflet popup styling */
-body.dark-theme .leaflet-popup-content {
-    color: #000000 !important;
-    background: white !important;
-}
-
 /* Override any inherited colors */
 .leaflet-popup-content-wrapper .leaflet-popup-content,
 .leaflet-popup-content-wrapper .leaflet-popup-content * {
@@ -913,48 +811,9 @@ body.dark-theme .leaflet-popup-content {
 }
 
 /* Specific overrides for dark theme */
-body.dark-theme .leaflet-popup-content-wrapper .leaflet-popup-content,
-body.dark-theme .leaflet-popup-content-wrapper .leaflet-popup-content * {
-    color: #000000 !important;
-    background: white !important;
-}
-
-.flight-path {
-    stroke: #0088ff;
-    stroke-width: 2;
-    fill: none;
-    opacity: 0.8;
-}
-
 /* ========================================
    19. SPECIAL EFFECTS
    ======================================== */
-.pulse-cyan, .pulse-amber { 
-    position: relative; 
-}
-
-.pulse-cyan::after, .pulse-amber::after {
-    content: '';
-    position: absolute;
-    inset: -6px;
-    border-radius: 16px;
-    pointer-events: none;
-}
-
-@keyframes ring-cyan {
-    0%   { box-shadow: 0 0 0 0 rgba(56,189,248,0.35); }
-    70%  { box-shadow: 0 0 0 12px rgba(56,189,248,0.00); }
-    100% { box-shadow: 0 0 0 0 rgba(56,189,248,0.00); }
-}
-
-@keyframes ring-amber {
-    0%   { box-shadow: 0 0 0 0 rgba(245,158,11,0.35); }
-    70%  { box-shadow: 0 0 0 12px rgba(245,158,11,0.00); }
-    100% { box-shadow: 0 0 0 0 rgba(245,158,11,0.00); }
-}
-
-.pulse-cyan::after  { animation: ring-cyan 1.2s ease-out 0s 2; }
-.pulse-amber::after { animation: ring-amber 1.2s ease-out 0s 2; }
 
 /* ========================================
    20. OWNER INFO & STATUS
@@ -1031,16 +890,6 @@ body.light-theme #mapbox-token-status {
 
 .help-icon:hover {
     background: #4b5563;
-    transform: scale(1.1);
-}
-
-body.dark-theme .help-icon {
-    background: #9ca3af;
-    color: #1f2937;
-}
-
-body.dark-theme .help-icon:hover {
-    background: #d1d5db;
     transform: scale(1.1);
 }
 
