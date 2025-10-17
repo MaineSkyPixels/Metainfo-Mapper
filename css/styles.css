@@ -888,24 +888,35 @@ hr {
 /* ========================================
    18. LEAFLET CUSTOMIZATION
    ======================================== */
+/* Leaflet popup styling - ensure readability */
+.leaflet-popup-content-wrapper {
+    background: white !important;
+}
+
 .leaflet-popup-content {
     margin: 8px;
     font-size: 13px;
-    color: #000000;
+    color: #000000 !important;
+    background: white !important;
 }
 
 /* Dark theme Leaflet popup styling */
 body.dark-theme .leaflet-popup-content {
-    color: #000000;
-}
-
-/* Ensure popup content is always readable */
-.leaflet-popup-content-wrapper {
-    background: white;
-}
-
-.leaflet-popup-content-wrapper .leaflet-popup-content {
     color: #000000 !important;
+    background: white !important;
+}
+
+/* Override any inherited colors */
+.leaflet-popup-content-wrapper .leaflet-popup-content,
+.leaflet-popup-content-wrapper .leaflet-popup-content * {
+    color: #000000 !important;
+}
+
+/* Specific overrides for dark theme */
+body.dark-theme .leaflet-popup-content-wrapper .leaflet-popup-content,
+body.dark-theme .leaflet-popup-content-wrapper .leaflet-popup-content * {
+    color: #000000 !important;
+    background: white !important;
 }
 
 .flight-path {
