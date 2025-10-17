@@ -573,13 +573,12 @@ body.light-theme .theme-toggle button {
     top: 24px;
     right: 24px;
     max-width: 320px;
-    background: rgba(15, 23, 42, 0.88);
+    background: rgba(15, 23, 42, 0.95);
     border: 1px solid rgba(148, 163, 184, 0.32);
     border-radius: 14px;
     padding: 18px 20px;
     color: #f8fafc;
-    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.45);
-    backdrop-filter: blur(6px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
     pointer-events: auto;
     z-index: 500;
 }
@@ -588,7 +587,7 @@ body.light-theme .map-intro-card {
     background: rgba(255, 255, 255, 0.95);
     border: 1px solid rgba(27, 110, 239, 0.12);
     color: #1f3655;
-    box-shadow: 0 20px 45px rgba(27, 110, 239, 0.15);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
 .map-intro-card p {
@@ -616,13 +615,12 @@ body.light-theme .map-intro-card .pill {
     top: 24px;
     left: 24px;
     max-width: 300px;
-    background: rgba(15, 23, 42, 0.9);
+    background: rgba(15, 23, 42, 0.95);
     border: 1px solid rgba(148, 163, 184, 0.28);
     border-radius: 14px;
     padding: 18px 20px;
     color: #f1f5ff;
-    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.4);
-    backdrop-filter: blur(6px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
     pointer-events: auto;
     z-index: 500;
 }
@@ -631,7 +629,7 @@ body.light-theme .map-about-card {
     background: rgba(255, 255, 255, 0.95);
     border: 1px solid rgba(27, 110, 239, 0.16);
     color: #1f3655;
-    box-shadow: 0 20px 45px rgba(27, 110, 239, 0.12);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
 .map-about-card h3 {
