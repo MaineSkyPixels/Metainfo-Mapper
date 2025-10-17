@@ -1,7 +1,7 @@
 /**
  * Metainfo Mapper - Client-side drone imagery GPS metadata visualization
  * Version: 1.7.0
- * Build: #101625d
+ * Build: #101725a
  * 
  * A privacy-first web application for visualizing drone imagery GPS metadata
  * while keeping all data processing entirely in the browser.
