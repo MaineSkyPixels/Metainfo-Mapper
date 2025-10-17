@@ -1220,21 +1220,25 @@
             if (!rtkStatsContainer) {
                 rtkStatsContainer = document.createElement('div');
                 rtkStatsContainer.id = 'rtk-stats';
-                rtkStatsContainer.innerHTML = `
-                    <hr style="margin: 15px 0;">
-                    <h4>RTK Analysis</h4>
-                    <p>RTK Fixed: <span id="rtk-fixed-count">0</span></p>
-                    <p>RTK Float: <span id="rtk-float-count">0</span></p>
-                    <p>RTK Single: <span id="rtk-single-count">0</span></p>
-                    <p>Avg Correction Age: <span id="rtk-avg-correction-age">N/A</span></p>
-                `;
                 document.getElementById('stats-content').appendChild(rtkStatsContainer);
             }
 
-            document.getElementById('rtk-fixed-count').textContent = rtkStats.fixed;
-            document.getElementById('rtk-float-count').textContent = rtkStats.float;
-            document.getElementById('rtk-single-count').textContent = rtkStats.single;
-            document.getElementById('rtk-avg-correction-age').textContent = rtkStats.avgCorrectionAge;
+            const showBanner = rtkStats.single > 0 || rtkStats.noRtk > 0;
+
+            rtkStatsContainer.innerHTML = `
+                <hr style="margin: 15px 0;">
+                <h4>RTK Analysis</h4>
+                ${showBanner ? `<div class="warning-banner" style="background-color: #fef2f2; color: #ef4444; padding: 10px; border-radius: 5px; margin-bottom: 10px; text-align: center;">Possible RTK Failure during Mission, check report for details.</div>` : ''}
+                <p>RTK Fixed: <span>${rtkStats.fixed}</span></p>
+                <p>RTK Float: <span>${rtkStats.float}</span></p>
+                <p>RTK Single: <span>${rtkStats.single}</span></p>
+                <p>No RTK Data: <span>${rtkStats.noRtk}</span></p>
+                <p>Avg Horizontal Deviation: <span>${rtkStats.avgHorizontalAccuracy}</span></p>
+                <p>Avg Vertical Deviation: <span>${rtkStats.avgVerticalAccuracy}</span></p>
+                <p>Avg Correction Age (Fixed): <span>${rtkStats.avgFixedCorrectionAge}</span></p>
+                <p style="color: #ef4444;">Avg Correction Age (>10ms): <span>${rtkStats.avgHighCorrectionAge}</span></p>
+                <p style="color: #f59e0b;">Images with Correction Age > 10ms: <span>${rtkStats.correctionAgeExceededCount}</span></p>
+            `;
         }
 
         /**
@@ -1610,6 +1614,10 @@ ${placemarks}
             border-left: 4px solid #3b82f6; 
             background-color: #f9fafb;
             border-radius: 4px;
+            transition: box-shadow 0.3s ease;
+        }
+        .image-entry:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
         .filename { font-weight: 600; color: #1f2937; }
         .coordinates { color: #6b7280; font-style: italic; font-size: 14px; }
