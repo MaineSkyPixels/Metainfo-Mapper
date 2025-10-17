@@ -49,7 +49,7 @@
 
             this.rtkOptions = {
                 checkbox: document.getElementById('rtk-enabled'),
-                enabled: false
+                enabled: true // Default to enabled
             };
 
             this.mapboxControls = {
@@ -585,6 +585,9 @@
             this.rtkOptions.checkbox.addEventListener('change', (e) => {
                 this.rtkOptions.enabled = e.target.checked;
             });
+            
+            // Initialize RTK checkbox state
+            this.rtkOptions.enabled = this.rtkOptions.checkbox.checked;
 
             // UI controls
             document.getElementById('add-more-btn').addEventListener('click', () => {
