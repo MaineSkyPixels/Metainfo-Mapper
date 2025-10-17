@@ -3,6 +3,71 @@
    ======================================== */
 
 /* ========================================
+   PERFORMANCE OPTIMIZATIONS
+   ======================================== */
+
+/* Hardware Acceleration - Enable GPU rendering */
+#map {
+    will-change: transform;
+    transform: translateZ(0);
+    contain: layout style paint;
+}
+
+.map-intro-card,
+.map-about-card {
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+.help-icon,
+.primary-btn,
+.secondary-btn,
+.token-card,
+.rtk-section {
+    will-change: transform;
+}
+
+.help-popup {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+}
+
+.help-popup-overlay {
+    will-change: opacity;
+    transform: translateZ(0);
+}
+
+.map-overlay {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+}
+
+#progress-bar {
+    will-change: width;
+    transform: translateZ(0);
+}
+
+/* CSS Containment for better rendering */
+#sidebar {
+    contain: layout style paint;
+}
+
+.token-card,
+.rtk-section,
+.map-intro-card,
+.map-about-card {
+    contain: layout style paint;
+}
+
+.help-popup {
+    contain: layout style paint;
+}
+
+#stats {
+    contain: layout style paint;
+}
+
+/* ========================================
    1. CSS RESET & BASE STYLES
    ======================================== */
 * {
@@ -165,13 +230,13 @@ body.light-theme .intro-card {
     border-radius: 12px;
     background: rgba(15, 23, 42, 0.55);
     border: 1px solid rgba(148, 163, 184, 0.28);
-    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.25);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 body.light-theme .token-card {
     background: rgba(27, 110, 239, 0.08);
     border: 1px solid rgba(27,110,239,0.18);
-    box-shadow: 0 10px 24px rgba(27,110,239,0.12);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .token-card h3 {
@@ -264,7 +329,7 @@ body.light-theme .rtk-section {
     border-radius: 4px;
     margin-right: 10px;
     position: relative;
-    transition: all 0.2s ease;
+    transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
 body.light-theme .checkmark {
@@ -333,7 +398,7 @@ body.light-theme input[type="text"] {
     padding: 40px 20px;
     text-align: center;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: transform 0.3s ease, background-color 0.3s ease;
     background: rgba(15, 23, 42, 0.55);
     margin-bottom: 10px;
 }
@@ -345,7 +410,7 @@ body.light-theme #drop-zone {
 
 #drop-zone:hover {
     transform: translateY(-2px);
-    box-shadow: 0 12px 24px rgba(15,23,42,0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 #drop-zone.dragover {
@@ -365,7 +430,7 @@ button {
     cursor: pointer;
     font-size: 14px;
     font-weight: 500;
-    transition: all 0.3s;
+    transition: transform 0.3s ease, background-color 0.3s ease;
     margin-bottom: 8px;
 }
 
@@ -451,7 +516,7 @@ body.light-theme .accent-btn:hover:not(:disabled) {
 
 #start-session {
     background: linear-gradient(135deg, #1b6eef, #38b2ac);
-    box-shadow: 0 10px 20px rgba(27,110,239,0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 #start-session:hover:not(:disabled) {
@@ -681,7 +746,7 @@ body.light-theme .map-about-card li::before {
 
 .map-overlay {
     pointer-events: none;
-    transition: all 0.35s ease;
+    transition: transform 0.35s ease, opacity 0.35s ease;
 }
 
 .map-overlay.collapsed {
@@ -892,7 +957,7 @@ hr {
 }
 
 body.light-theme #owner-info .owner-foot { 
-    opacity: 0.9; 
+    opacity: 0.9;
 }
 
 #mapbox-token-status {
@@ -935,11 +1000,12 @@ body.light-theme #mapbox-token-status {
     cursor: help;
     margin-left: 8px;
     position: relative;
-    transition: background-color 0.2s ease;
+    transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
 .help-icon:hover {
     background: #4b5563;
+    transform: scale(1.1);
 }
 
 body.dark-theme .help-icon {
@@ -949,6 +1015,7 @@ body.dark-theme .help-icon {
 
 body.dark-theme .help-icon:hover {
     background: #d1d5db;
+    transform: scale(1.1);
 }
 
 /* Help popup system */
@@ -967,7 +1034,7 @@ body.dark-theme .help-icon:hover {
     width: 90%;
     max-height: 80vh;
     overflow-y: auto;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
     z-index: 10000;
     opacity: 0;
     visibility: hidden;
@@ -1007,11 +1074,12 @@ body.dark-theme .help-icon:hover {
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    transition: background-color 0.2s ease;
+    transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
 .help-popup-close:hover {
     background: rgba(255, 255, 255, 0.1);
+    transform: scale(1.1);
 }
 
 .help-popup-content {
