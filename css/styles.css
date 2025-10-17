@@ -891,6 +891,21 @@ hr {
 .leaflet-popup-content {
     margin: 8px;
     font-size: 13px;
+    color: #000000;
+}
+
+/* Dark theme Leaflet popup styling */
+body.dark-theme .leaflet-popup-content {
+    color: #000000;
+}
+
+/* Ensure popup content is always readable */
+.leaflet-popup-content-wrapper {
+    background: white;
+}
+
+.leaflet-popup-content-wrapper .leaflet-popup-content {
+    color: #000000 !important;
 }
 
 .flight-path {
