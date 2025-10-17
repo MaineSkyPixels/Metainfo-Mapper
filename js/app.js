@@ -1517,69 +1517,145 @@ ${placemarks}
 <head>
     <title>RTK Report - ${sessionName}</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        h1 { color: #2c3e50; }
-        h2 { color: #34495e; margin-top: 30px; }
-        .stats { background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0; }
-        .image-entry { margin: 15px 0; padding: 10px; border-left: 3px solid #3498db; }
-        .filename { font-weight: bold; color: #2c3e50; }
-        .coordinates { color: #7f8c8d; font-style: italic; }
-        .rtk-data { margin-left: 20px; color: #27ae60; }
-        .rtk-field { margin: 3px 0; }
-        .no-rtk { color: #e74c3c; font-style: italic; }
-        .warning { color: #e67e22; }
-        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif; 
+            margin: 0;
+            background-color: #f4f7f9;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 20px;
+        }
+        .header h1 { 
+            color: #1f2937; 
+            font-size: 24px;
+            margin: 0;
+        }
+        .header a {
+            font-size: 14px;
+            color: #3b82f6;
+            text-decoration: none;
+        }
+        .header a:hover {
+            text-decoration: underline;
+        }
+        h1 { 
+            color: #1f2937; 
+            font-size: 24px;
+            margin: 0;
+        }
+        h2 { 
+            color: #1f2937; 
+            margin-top: 30px; 
+            font-size: 20px;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 8px;
+        }
+        .stats { 
+            background: #f9fafb; 
+            padding: 20px; 
+            border-radius: 8px; 
+            margin: 20px 0; 
+            border: 1px solid #e5e7eb;
+        }
+        .image-entry { 
+            margin: 20px 0; 
+            padding: 15px; 
+            border-left: 4px solid #3b82f6; 
+            background-color: #f9fafb;
+            border-radius: 4px;
+        }
+        .filename { font-weight: 600; color: #1f2937; }
+        .coordinates { color: #6b7280; font-style: italic; font-size: 14px; }
+        .rtk-data { margin-left: 20px; color: #16a34a; }
+        .rtk-field { margin: 5px 0; }
+        .no-rtk { color: #ef4444; font-style: italic; }
+        .rtk-single { color: #ef4444; }
+        .warning { color: #f59e0b; }
+        table { 
+            border-collapse: collapse; 
+            width: 100%; 
+            margin: 20px 0; 
+        }
+        th, td { 
+            border: 1px solid #e5e7eb; 
+            padding: 12px; 
+            text-align: left; 
+        }
+        th { 
+            background-color: #f9fafb; 
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
-    <h1>RTK Analysis Report</h1>
-    <p><strong>Session:</strong> ${sessionName}</p>
-    <p><strong>Report Date:</strong> ${reportDate}</p>
-    <p><strong>Total Images:</strong> ${this.imageData.length}</p>
+    <div class="container">
+        <div class="header">
+            <h1>Metainfo Mapper</h1>
+            <a href="https://metainfomapper.com" target="_blank" rel="noopener">metainfomapper.com</a>
+        </div>
+        
+        <h1>RTK Analysis Report</h1>
+        <p><strong>Session:</strong> ${sessionName}</p>
+        <p><strong>Report Date:</strong> ${reportDate}</p>
+        <p><strong>Total Images:</strong> ${this.imageData.length}</p>
 
-    <div class="stats">
-        <h2>RTK Statistics</h2>
-        <table>
-            <tr><th>RTK Status</th><th>Count</th></tr>
-            <tr><td>RTK Fixed</td><td>${rtkStats.fixed}</td></tr>
-            <tr><td>RTK Float</td><td>${rtkStats.float}</td></tr>
-            <tr><td>RTK Single</td><td>${rtkStats.single}</td></tr>
-            <tr><td>No RTK Data</td><td>${rtkStats.noRtk}</td></tr>
-        </table>
-        <p><strong>Average Horizontal Deviation:</strong> ${rtkStats.avgHorizontalAccuracy}</p>
-        <p><strong>Average Vertical Deviation:</strong> ${rtkStats.avgVerticalAccuracy}</p>
-        <p><strong>Average Correction Age:</strong> ${rtkStats.avgCorrectionAge}</p>
-        <p class="warning"><strong>Images with Correction Age > 5ms:</strong> ${rtkStats.correctionAgeExceededCount}</p>
-    </div>
+        <div class="stats">
+            <h2>RTK Statistics</h2>
+            <table>
+                <tr><th>RTK Status</th><th>Count</th></tr>
+                <tr><td>RTK Fixed</td><td>${rtkStats.fixed}</td></tr>
+                <tr><td>RTK Float</td><td>${rtkStats.float}</td></tr>
+                <tr><td>RTK Single</td><td>${rtkStats.single}</td></tr>
+                <tr><td>No RTK Data</td><td>${rtkStats.noRtk}</td></tr>
+            </table>
+            <p><strong>Average Horizontal Deviation:</strong> ${rtkStats.avgHorizontalAccuracy}</p>
+            <p><strong>Average Vertical Deviation:</strong> ${rtkStats.avgVerticalAccuracy}</p>
+            <p><strong>Average Correction Age:</strong> ${rtkStats.avgCorrectionAge}</p>
+            <p class="warning"><strong>Images with Correction Age > 5ms:</strong> ${rtkStats.correctionAgeExceededCount}</p>
+        </div>
 
-    <h2>Image Details</h2>`;
+        <h2>Image Details</h2>`;
 
             sortedImageData.forEach(image => {
                 html += `
-    <div class="image-entry">
-        <div class="filename">${image.filename}</div>
-        <div class="coordinates">GPS Coordinates: ${image.latitude.toFixed(6)}, ${image.longitude.toFixed(6)}</div>`;
+        <div class="image-entry">
+            <div class="filename">${image.filename}</div>
+            <div class="coordinates">GPS Coordinates: ${image.latitude.toFixed(6)}, ${image.longitude.toFixed(6)}</div>`;
 
                 if (image.rtk && (image.rtk.status !== null || image.rtk.processingMethod !== null)) {
+                    const rtkDataClass = image.rtk.status === 16 ? 'rtk-data rtk-single' : 'rtk-data';
                     html += `
-        <div class="rtk-data">
-            <div class="rtk-field">RTK Status: ${image.rtk.status !== null ? this.getRTKStatusText(image.rtk.status) : 'N/A'}</div>
-            <div class="rtk-field">Horizontal Accuracy: ${image.rtk.horizontalAccuracy !== null ? image.rtk.horizontalAccuracy + 'm' : 'N/A'}</div>
-            <div class="rtk-field">Vertical Accuracy: ${image.rtk.verticalAccuracy !== null ? image.rtk.verticalAccuracy + 'm' : 'N/A'}</div>
-            <div class="rtk-field">Correction Age: ${image.rtk.correctionAge !== null ? image.rtk.correctionAge + 'ms' : 'N/A'}</div>
-        </div>`;
+            <div class="${rtkDataClass}">
+                <div class="rtk-field">RTK Status: ${image.rtk.status !== null ? this.getRTKStatusText(image.rtk.status) : 'N/A'}</div>
+                <div class="rtk-field">Horizontal Accuracy: ${image.rtk.horizontalAccuracy !== null ? image.rtk.horizontalAccuracy + 'm' : 'N/A'}</div>
+                <div class="rtk-field">Vertical Accuracy: ${image.rtk.verticalAccuracy !== null ? image.rtk.verticalAccuracy + 'm' : 'N/A'}</div>
+                <div class="rtk-field">Correction Age: ${image.rtk.correctionAge !== null ? image.rtk.correctionAge + 'ms' : 'N/A'}</div>
+            </div>`;
                 } else {
                     html += `
-        <div class="no-rtk">No RTK data available</div>`;
+            <div class="no-rtk">No RTK data available</div>`;
                 }
 
                 html += `
-    </div>`;
+        </div>`;
             });
 
             html += `
+    </div>
 </body>
 </html>`;
 
