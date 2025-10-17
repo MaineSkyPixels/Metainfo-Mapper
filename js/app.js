@@ -1244,6 +1244,11 @@
             let fixed = 0, float = 0, single = 0, noRtk = 0;
             let correctionAgeSum = 0;
             let correctionAgeCount = 0;
+            let horizontalAccuracySum = 0;
+            let horizontalAccuracyCount = 0;
+            let verticalAccuracySum = 0;
+            let verticalAccuracyCount = 0;
+            let correctionAgeExceededCount = 0;
 
             this.imageData.forEach(image => {
                 let hasRtkData = false;
@@ -1279,6 +1284,19 @@
                     if (image.rtk.correctionAge !== null) {
                         correctionAgeSum += image.rtk.correctionAge;
                         correctionAgeCount++;
+                        if (image.rtk.correctionAge > 5) {
+                            correctionAgeExceededCount++;
+                        }
+                    }
+
+                    if (typeof image.rtk.horizontalAccuracy === 'number') {
+                        horizontalAccuracySum += image.rtk.horizontalAccuracy;
+                        horizontalAccuracyCount++;
+                    }
+
+                    if (typeof image.rtk.verticalAccuracy === 'number') {
+                        verticalAccuracySum += image.rtk.verticalAccuracy;
+                        verticalAccuracyCount++;
                     }
                 }
                 
@@ -1291,7 +1309,15 @@
                 ? (correctionAgeSum / correctionAgeCount).toFixed(2) + ' ms'
                 : 'N/A';
 
-            return { fixed, float, single, noRtk, avgCorrectionAge };
+            const avgHorizontalAccuracy = horizontalAccuracyCount > 0
+                ? (horizontalAccuracySum / horizontalAccuracyCount).toFixed(4) + ' m'
+                : 'N/A';
+
+            const avgVerticalAccuracy = verticalAccuracyCount > 0
+                ? (verticalAccuracySum / verticalAccuracyCount).toFixed(4) + ' m'
+                : 'N/A';
+
+            return { fixed, float, single, noRtk, avgCorrectionAge, avgHorizontalAccuracy, avgVerticalAccuracy, correctionAgeExceededCount };
         }
 
         /**
@@ -1472,6 +1498,19 @@ ${placemarks}
             const sessionName = this.sessionName || 'Session';
             const reportDate = new Date().toLocaleDateString();
 
+            // Sort images with non-fixed RTK status first
+            const sortedImageData = [...this.imageData].sort((a, b) => {
+                const aFixed = a.rtk?.status === 50;
+                const bFixed = b.rtk?.status === 50;
+                if (aFixed && !bFixed) {
+                    return 1;
+                }
+                if (!aFixed && bFixed) {
+                    return -1;
+                }
+                return 0;
+            });
+
             let html = `
 <!DOCTYPE html>
 <html>
@@ -1488,6 +1527,7 @@ ${placemarks}
         .rtk-data { margin-left: 20px; color: #27ae60; }
         .rtk-field { margin: 3px 0; }
         .no-rtk { color: #e74c3c; font-style: italic; }
+        .warning { color: #e67e22; }
         table { border-collapse: collapse; width: 100%; margin: 20px 0; }
         th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
         th { background-color: #f2f2f2; }
@@ -1508,12 +1548,15 @@ ${placemarks}
             <tr><td>RTK Single</td><td>${rtkStats.single}</td></tr>
             <tr><td>No RTK Data</td><td>${rtkStats.noRtk}</td></tr>
         </table>
+        <p><strong>Average Horizontal Deviation:</strong> ${rtkStats.avgHorizontalAccuracy}</p>
+        <p><strong>Average Vertical Deviation:</strong> ${rtkStats.avgVerticalAccuracy}</p>
         <p><strong>Average Correction Age:</strong> ${rtkStats.avgCorrectionAge}</p>
+        <p class="warning"><strong>Images with Correction Age > 5ms:</strong> ${rtkStats.correctionAgeExceededCount}</p>
     </div>
 
     <h2>Image Details</h2>`;
 
-            this.imageData.forEach(image => {
+            sortedImageData.forEach(image => {
                 html += `
     <div class="image-entry">
         <div class="filename">${image.filename}</div>
@@ -1523,11 +1566,8 @@ ${placemarks}
                     html += `
         <div class="rtk-data">
             <div class="rtk-field">RTK Status: ${image.rtk.status !== null ? this.getRTKStatusText(image.rtk.status) : 'N/A'}</div>
-            <div class="rtk-field">Processing Method: ${image.rtk.processingMethod || 'N/A'}</div>
             <div class="rtk-field">Horizontal Accuracy: ${image.rtk.horizontalAccuracy !== null ? image.rtk.horizontalAccuracy + 'm' : 'N/A'}</div>
             <div class="rtk-field">Vertical Accuracy: ${image.rtk.verticalAccuracy !== null ? image.rtk.verticalAccuracy + 'm' : 'N/A'}</div>
-            <div class="rtk-field">DOP: ${image.rtk.dop || 'N/A'}</div>
-            <div class="rtk-field">Differential: ${image.rtk.differential || 'N/A'}</div>
             <div class="rtk-field">Correction Age: ${image.rtk.correctionAge !== null ? image.rtk.correctionAge + 'ms' : 'N/A'}</div>
         </div>`;
                 } else {
