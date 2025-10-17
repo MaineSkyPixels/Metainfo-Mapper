@@ -97,5 +97,6 @@ jspm_packages/
 
 .gemini/
 gha-creds-*.json
+geminicode.md
 
 .github/workflows
