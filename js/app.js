@@ -1294,7 +1294,7 @@
                     if (image.rtk.correctionAge !== null) {
                         correctionAgeSum += image.rtk.correctionAge;
                         correctionAgeCount++;
-                        if (image.rtk.correctionAge > 5) {
+                        if (image.rtk.correctionAge > 10) {
                             correctionAgeExceededCount++;
                             highCorrectionAgeSum += image.rtk.correctionAge;
                             highCorrectionAgeCount++;
@@ -1665,8 +1665,8 @@ ${placemarks}
             <p><strong>Average Horizontal Deviation:</strong> ${rtkStats.avgHorizontalAccuracy}</p>
             <p><strong>Average Vertical Deviation:</strong> ${rtkStats.avgVerticalAccuracy}</p>
             <p><strong>Average Correction Age (RTK Fixed):</strong> ${rtkStats.avgFixedCorrectionAge}</p>
-            <p class="danger"><strong>Average Correction Age (>5ms):</strong> ${rtkStats.avgHighCorrectionAge}</p>
-            <p class="warning"><strong>Images with Correction Age > 5ms:</strong> ${rtkStats.correctionAgeExceededCount}</p>
+            <p class="danger"><strong>Average Correction Age (>10ms):</strong> ${rtkStats.avgHighCorrectionAge}</p>
+            <p class="warning"><strong>Images with Correction Age > 10ms:</strong> ${rtkStats.correctionAgeExceededCount}</p>
         </div>
 
         <h2>Image Details</h2>`;
